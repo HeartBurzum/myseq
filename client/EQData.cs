@@ -16,6 +16,8 @@ using System.Drawing;
 
 using System.Threading;
 
+using System.Threading.Tasks;
+
 using System.Collections;
 
 using System.Globalization;
@@ -29,6 +31,13 @@ using System.Drawing.Drawing2D;
 using System.Text.RegularExpressions;
 
 using System.Runtime.InteropServices;
+
+using Discord;
+
+using Discord.Webhook;
+
+
+using Color = System.Drawing.Color;
 
 
 
@@ -184,6 +193,8 @@ namespace myseq {
         private ColorConverter ColorChart = new ColorConverter();
 
         private bool zoning = false;
+
+        private string messagecontent = "";
 
         public bool Zoning { get { return zoning; } set { zoning = value; } }
 
@@ -3327,7 +3338,7 @@ namespace myseq {
 
                                     Settings.Instance.PlayOnAlert, Settings.Instance.AlertAudioFile,
 
-                                    Settings.Instance.BeepOnAlert, MatchFullTextA))
+                                    Settings.Instance.BeepOnAlert, MatchFullTextA, DiscordOnMatch: Settings.Instance.DiscordAlerts))
                                 {
 
                                     alert = true;
@@ -3611,10 +3622,11 @@ namespace myseq {
 
              bool TalkOnMatch, string TalkDescr, bool PlayOnMatch, String AudioFile,
 
-             bool BeepOnMatch, bool MatchFullText, bool EmailOnMatch = false)
+             bool BeepOnMatch, bool MatchFullText, bool EmailOnMatch = false, bool DiscordOnMatch = false)
         {
 
             string t = mobname;
+            
 
             bool alert = false;
 
@@ -3676,6 +3688,19 @@ namespace myseq {
                             {
 
                                 Beep(300, 100);
+
+                            }
+
+                            if (DiscordOnMatch)
+                            {
+
+                                messagecontent = FixMobNameToSpeak(t) + " Spawned at " + DateTime.Now.ToShortTimeString() + " " + DateTime.Now.ToShortDateString();
+                                DiscordMessage D = new DiscordMessage();
+                                D.messageContent = messagecontent;
+                                ThreadStart discordDelegate = new ThreadStart(D.Discord_Message);
+
+                                Thread discordThread = new Thread(discordDelegate);
+                                discordThread.Start();
 
                             }
 
@@ -3751,7 +3776,7 @@ namespace myseq {
                     }
 
                     alert = true;
-
+                    
                     break;
 
                 }
@@ -3761,6 +3786,7 @@ namespace myseq {
             return alert;
 
         }
+
 
         private void SmtpClient_OnCompleted(object sender, AsyncCompletedEventArgs e)
         {
@@ -5352,6 +5378,20 @@ namespace myseq {
         }
 
         #endregion
+    }
+
+    public class DiscordMessage
+    {
+        public string messageContent;
+        public void Discord_Message()
+        {
+            using (var client = new DiscordWebhookClient(DiscordSettings.Instance.DiscordWebhookUrl))
+            {
+
+                var result = client.SendMessageAsync(text: messageContent).Result;
+
+            }
+        }
     }
 
 

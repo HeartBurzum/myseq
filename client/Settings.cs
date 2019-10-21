@@ -97,6 +97,110 @@ namespace Structures
         DrawNone            = 0x00000000,       // Maximum savings - all enabled
 
     };
+
+    #region DiscordSettings class
+
+    [Serializable]
+
+    public sealed class DiscordSettings
+
+    {
+        private volatile static DiscordSettings instance;
+
+        private static object syncObj = new object();
+
+        private string discordWebhookUrl = "";
+
+
+        private String prefsDir = "";
+
+        public string DiscordWebhookUrl { get { return discordWebhookUrl; } set { discordWebhookUrl = value; } }
+
+        private DiscordSettings() {}
+
+        public static DiscordSettings Instance
+        {
+
+            get
+            {
+
+                // only create a new instance if one doesn't already exist.
+
+                if (instance == null)
+
+                    // use this lock to ensure that only one thread is access this block of code at once.
+
+                    lock (syncObj)
+
+                        if (instance == null)
+
+                            instance = new DiscordSettings();
+
+                // return instance where it was just created or already existed.
+
+                return instance;
+
+            }
+
+            set { instance = value; }
+
+        }
+
+        public void Save(string filename)
+        {
+
+            if (prefsDir == string.Empty)
+            {
+
+                prefsDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MySEQ");
+
+            }
+
+            FileStream fs = new FileStream(filename, FileMode.Create);
+
+            SoapFormatter sf1 = new SoapFormatter();
+
+            sf1.Serialize(fs, DiscordSettings.Instance);
+
+            fs.Close();
+
+            String oldconfigFile = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "myseq.xml");
+            if (File.Exists(oldconfigFile))
+                File.Delete(oldconfigFile);
+
+        }
+
+        public void Load(string filename)
+        {
+
+            FileStream fs = null;
+
+            try
+            {
+
+                fs = new FileStream(filename, FileMode.Open);
+
+                SoapFormatter sf1 = new SoapFormatter();
+
+
+                DiscordSettings.Instance = (DiscordSettings)sf1.Deserialize(fs);
+
+                String myPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MySEQ");
+
+                DiscordSettings.Instance.prefsDir = myPath;
+
+            }
+
+            catch (Exception ex) { LogLib.WriteLine("Error in DiscordSettings.Load(): ", ex); }
+
+            if (fs != null) fs.Close();
+
+        }
+
+    }
+
+    #endregion
+
     #region SMTPSettings class
 
     [Serializable]
@@ -621,6 +725,8 @@ namespace Structures
 
         private bool emailAlerts = false;
 
+        private bool discordAlerts = false;
+
         // new filters stuff
 
         private bool showPlayers = true;
@@ -836,6 +942,8 @@ namespace Structures
         public bool TalkOnAlert { get { return talkOnAlert; } set { talkOnAlert = value; } }
 
         public bool EmailAlerts { get { return emailAlerts; } set { emailAlerts = value; } }
+
+        public bool DiscordAlerts { get { return discordAlerts; } set { discordAlerts = value; } }
 
         public string HuntAudioFile {get{return mHuntAudioFile;} set{mHuntAudioFile = value;}}
 
