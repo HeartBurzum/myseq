@@ -36,6 +36,8 @@ using Discord;
 
 using Discord.Webhook;
 
+using NodaTime;
+
 
 using Color = System.Drawing.Color;
 
@@ -3693,8 +3695,11 @@ namespace myseq {
 
                             if (DiscordOnMatch)
                             {
-
-                                messagecontent = FixMobNameToSpeak(t) + " Spawned at " + DateTime.Now.ToShortTimeString() + " " + DateTime.Now.ToShortDateString();
+                                var currenttime = DateTime.UtcNow;
+                                var tz = DateTimeZoneProviders.Tzdb.GetSystemDefault();
+                                var zdt = new ZonedDateTime(Instant.FromDateTimeUtc(currenttime), tz);
+                                string timestring = zdt.ToString("hh':'mm':'ss' 'tt' 'x' 'MM'/'dd'/'yyyy", CultureInfo.InvariantCulture);
+                                messagecontent = FixMobNameToSpeak(t) + " Spawned at " + timestring;
                                 DiscordMessage D = new DiscordMessage();
                                 D.messageContent = messagecontent;
                                 ThreadStart discordDelegate = new ThreadStart(D.Discord_Message);

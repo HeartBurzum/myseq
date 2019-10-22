@@ -12,6 +12,8 @@ using System.Collections;
 
 using System.ComponentModel;
 
+using System.Globalization;
+
 using System.IO;
 
 using System.Threading.Tasks;
@@ -29,6 +31,8 @@ using System.Net.Mail;
 using Discord;
 
 using Discord.Webhook;
+
+using NodaTime;
 
 
 
@@ -3026,7 +3030,12 @@ namespace myseq
                 using (var client = new DiscordWebhookClient(DiscordSettings.Instance.DiscordWebhookUrl))
                 {
 
-                    await client.SendMessageAsync(text: "Test Message");
+                    var currenttime = DateTime.UtcNow;
+                    var tz = DateTimeZoneProviders.Tzdb.GetSystemDefault();
+                    var zdt = new ZonedDateTime(Instant.FromDateTimeUtc(currenttime), tz);
+                    string timestring = zdt.ToString("hh':'mm':'ss' 'tt' 'x' 'MM'/'dd'/'yyyy", CultureInfo.InvariantCulture);
+
+                    await client.SendMessageAsync(text: "Test Message at: " + timestring);
 
                 }
             }
