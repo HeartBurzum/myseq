@@ -2732,7 +2732,7 @@ namespace myseq {
 
                                     // moved the type change before this.  So now only trigger kills
                                     // for name changes of corpses.
-                                    mobsTimers.Kill(mob);
+                                    mobsTimers.Kill(mob, filters.alert);
                                 }
 
                             }

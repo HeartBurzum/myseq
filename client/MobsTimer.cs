@@ -24,6 +24,10 @@ using System.Text.RegularExpressions;
 
 using System.Runtime.InteropServices;
 
+using System.Threading;
+
+using NodaTime;
+
 
 
 using Structures;
@@ -1199,14 +1203,52 @@ namespace myseq {
 
         // This updates KillTime and NextSpawn.
 
-        public void Kill(SPAWNINFO mob)
-
+        public void Kill(SPAWNINFO mob, ArrayList filters)
+            
         {
+            string mobname = "";
+            bool matched = false;
 
             try
             {
+                foreach (string str in filters)
+                {
 
-                if ((Settings.Instance.SaveSpawnLogs) || (mapName.Length > 0))
+
+                    mobname = mob.Name.Replace("_", " ");
+
+                    mobname = Regex.Replace(mobname, "^*[^a-zA-Z #]", "");
+
+                    Regex regEx = new Regex(".*" + str + ".*", RegexOptions.IgnoreCase);
+
+                    bool compare = regEx.Match(mobname).Success;
+
+                    if (compare)
+                    {
+
+                        matched = true;
+                        break;
+
+                    }
+                }
+
+               if (matched && Settings.Instance.DiscordAlerts)
+                {
+                    var currenttime = DateTime.UtcNow;
+                    var tz = DateTimeZoneProviders.Tzdb.GetSystemDefault();
+                    var zdt = new ZonedDateTime(Instant.FromDateTimeUtc(currenttime), tz);
+                    string timestring = zdt.ToString("hh':'mm':'ss' 'tt' 'x' 'MM'/'dd'/'yyyy", CultureInfo.InvariantCulture);
+                    string messagecontent = mobname + " Killed at " + timestring;
+
+                    DiscordMessage D = new DiscordMessage();
+                    D.messageContent = messagecontent;
+                    ThreadStart discordDelegate = new ThreadStart(D.Discord_Message);
+                    Thread discordThread = new Thread(discordDelegate);
+
+                    discordThread.Start();
+                }
+
+               if ((Settings.Instance.SaveSpawnLogs) || (mapName.Length > 0))
                     LogSpawns(String.Format("[KILL] Loc: {0} Name: {1}", mob.SpawnLoc, mob.Name));
 
                 if (mobsTimer.ContainsKey(mob.ZoneSpawnLoc))
