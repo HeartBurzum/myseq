@@ -1214,10 +1214,9 @@ namespace myseq {
                 foreach (string str in filters)
                 {
 
-
                     mobname = mob.Name.Replace("_", " ");
 
-                    mobname = Regex.Replace(mobname, "^*[^a-zA-Z #]", "");
+                    mobname = Regex.Replace(mobname, "^*[^a-zA-Z ]", "");
 
                     Regex regEx = new Regex(".*" + str + ".*", RegexOptions.IgnoreCase);
 

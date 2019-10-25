@@ -10,3 +10,5 @@ packages/
 .vs/
 
 ipch/
+
+MySEQ.VC.db
