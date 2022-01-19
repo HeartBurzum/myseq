@@ -60,41 +60,41 @@ void Spawn::init(IniReaderInterface* ir_intf)
 	else
 		race8 = true;
 
-	setOffset(OT_name,		ir_intf->readIntegerEntry("SpawnInfo Offsets", "NameOffset"), "First Name");
+	setOffset(OT_name,		(UINT)ir_intf->readIntegerEntry("SpawnInfo Offsets", "NameOffset"), "First Name");
 
-	setOffset(OT_lastname,	ir_intf->readIntegerEntry("SpawnInfo Offsets", "LastNameOffset"), "Last Name");
+	setOffset(OT_lastname,	(UINT)ir_intf->readIntegerEntry("SpawnInfo Offsets", "LastNameOffset"), "Last Name");
 
-	setOffset(OT_x,			ir_intf->readIntegerEntry("SpawnInfo Offsets", "XOffset"), "X");
+	setOffset(OT_x,			(UINT)ir_intf->readIntegerEntry("SpawnInfo Offsets", "XOffset"), "X");
 
-	setOffset(OT_y,			ir_intf->readIntegerEntry("SpawnInfo Offsets", "YOffset"), "Y");
+	setOffset(OT_y,			(UINT)ir_intf->readIntegerEntry("SpawnInfo Offsets", "YOffset"), "Y");
 
-	setOffset(OT_z,			ir_intf->readIntegerEntry("SpawnInfo Offsets", "ZOffset"), "Z");
+	setOffset(OT_z,			(UINT)ir_intf->readIntegerEntry("SpawnInfo Offsets", "ZOffset"), "Z");
 
-	setOffset(OT_speed,		ir_intf->readIntegerEntry("SpawnInfo Offsets", "SpeedOffset"), "Speed");
+	setOffset(OT_speed,		(UINT)ir_intf->readIntegerEntry("SpawnInfo Offsets", "SpeedOffset"), "Speed");
 
-	setOffset(OT_heading,	ir_intf->readIntegerEntry("SpawnInfo Offsets", "HeadingOffset"), "Heading");
+	setOffset(OT_heading,	(UINT)ir_intf->readIntegerEntry("SpawnInfo Offsets", "HeadingOffset"), "Heading");
 
-	setOffset(OT_prev,		ir_intf->readIntegerEntry("SpawnInfo Offsets", "PrevOffset"), "Previous");
+	setOffset(OT_prev,		(UINT)ir_intf->readIntegerEntry("SpawnInfo Offsets", "PrevOffset"), "Previous");
 
-	setOffset(OT_next,		ir_intf->readIntegerEntry("SpawnInfo Offsets", "NextOffset"), "Next");
+	setOffset(OT_next,		(UINT)ir_intf->readIntegerEntry("SpawnInfo Offsets", "NextOffset"), "Next");
 
-	setOffset(OT_type,		ir_intf->readIntegerEntry("SpawnInfo Offsets", "TypeOffset"), "Type");
+	setOffset(OT_type,		(UINT)ir_intf->readIntegerEntry("SpawnInfo Offsets", "TypeOffset"), "Type");
 
-	setOffset(OT_level,		ir_intf->readIntegerEntry("SpawnInfo Offsets", "LevelOffset"), "Level");
+	setOffset(OT_level,		(UINT)ir_intf->readIntegerEntry("SpawnInfo Offsets", "LevelOffset"), "Level");
 
-	setOffset(OT_hidden,	ir_intf->readIntegerEntry("SpawnInfo Offsets", "HideOffset"), "Hidden");
+	setOffset(OT_hidden,	(UINT)ir_intf->readIntegerEntry("SpawnInfo Offsets", "HideOffset"), "Hidden");
 
-	setOffset(OT_class,		ir_intf->readIntegerEntry("SpawnInfo Offsets", "ClassOffset"), "Class");
+	setOffset(OT_class,		(UINT)ir_intf->readIntegerEntry("SpawnInfo Offsets", "ClassOffset"), "Class");
 
-	setOffset(OT_id,		ir_intf->readIntegerEntry("SpawnInfo Offsets", "SpawnIDOffset"), "Id");
+	setOffset(OT_id,		(UINT)ir_intf->readIntegerEntry("SpawnInfo Offsets", "SpawnIDOffset"), "Id");
 
-	setOffset(OT_owner,		ir_intf->readIntegerEntry("SpawnInfo Offsets", "OwnerIDOffset"), "OwnerID");
+	setOffset(OT_owner,		(UINT)ir_intf->readIntegerEntry("SpawnInfo Offsets", "OwnerIDOffset"), "OwnerID");
 
-	setOffset(OT_race,		ir_intf->readIntegerEntry("SpawnInfo Offsets", "RaceOffset"), "Race");
+	setOffset(OT_race,		(UINT)ir_intf->readIntegerEntry("SpawnInfo Offsets", "RaceOffset"), "Race");
 
-	setOffset(OT_primary,	ir_intf->readIntegerEntry("SpawnInfo Offsets", "PrimaryOffset"), "Primary");
+	setOffset(OT_primary,	(UINT)ir_intf->readIntegerEntry("SpawnInfo Offsets", "PrimaryOffset"), "Primary");
 	
-	setOffset(OT_offhand,	ir_intf->readIntegerEntry("SpawnInfo Offsets", "OffhandOffset"), "Offhand");
+	setOffset(OT_offhand,	(UINT)ir_intf->readIntegerEntry("SpawnInfo Offsets", "OffhandOffset"), "Offhand");
 
 	// Determine how many bytes we should read for each spawn
 
@@ -143,7 +143,7 @@ void Spawn::packNetBufferStrings(UINT flags, string firstName, string lastName)
 
 
 
-void Spawn::packNetBufferRaw(UINT flags, UINT _this)
+void Spawn::packNetBufferRaw(UINT flags, QWORD _this)
 
 {
 
@@ -165,7 +165,7 @@ void Spawn::packNetBufferRaw(UINT flags, UINT _this)
 
 	if (flags == 0x06) {
 
-		tempNetBuffer.id		= _this;
+		tempNetBuffer.id		= (UINT)_this;
 
 	} else {
 
@@ -199,7 +199,7 @@ void Spawn::packNetBufferRaw(UINT flags, UINT _this)
 
 }
 
-void Spawn::packNetBufferEmpty(UINT flags, UINT _this)
+void Spawn::packNetBufferEmpty(UINT flags, QWORD _this)
 
 {
 

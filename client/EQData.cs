@@ -3628,7 +3628,8 @@ namespace myseq {
         {
 
             string t = mobname;
-            
+            mobname.Replace(@"`", "");
+
 
             bool alert = false;
 
@@ -3636,7 +3637,7 @@ namespace myseq {
 
             foreach (string str in exps)
             {
-
+                str.Replace(@"`", "");
                 bool matched = false;
 
                 // if "match full text" is ON...

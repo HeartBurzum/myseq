@@ -46,7 +46,7 @@ namespace myseq {
 
 
 
-			lblVersion.Text = Application.ProductVersion.ToString() + " EqMule Build";
+			lblVersion.Text = Application.ProductVersion.ToString() + " JHz Build";
 
 
 

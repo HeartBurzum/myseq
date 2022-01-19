@@ -42,21 +42,21 @@ void Item::init(IniReaderInterface* ir_intf)
 
 {
 
-	setOffset(OT_prev, ir_intf->readIntegerEntry("GroundItem Offsets", "PrevOffset"), "Previous");
+	setOffset(OT_prev, (UINT)ir_intf->readIntegerEntry("GroundItem Offsets", "PrevOffset"), "Previous");
 
-	setOffset(OT_next, ir_intf->readIntegerEntry("GroundItem Offsets", "NextOffset"), "Next");
+	setOffset(OT_next, (UINT)ir_intf->readIntegerEntry("GroundItem Offsets", "NextOffset"), "Next");
 
-	setOffset(OT_id, ir_intf->readIntegerEntry("GroundItem Offsets", "IdOffset"), "ID");
+	setOffset(OT_id, (UINT)ir_intf->readIntegerEntry("GroundItem Offsets", "IdOffset"), "ID");
 
-	setOffset(OT_dropid, ir_intf->readIntegerEntry("GroundItem Offsets", "DropIdOffset"), "Drop ID");
+	setOffset(OT_dropid, (UINT)ir_intf->readIntegerEntry("GroundItem Offsets", "DropIdOffset"), "Drop ID");
 
-	setOffset(OT_x, ir_intf->readIntegerEntry("GroundItem Offsets", "XOffset"), "X");
+	setOffset(OT_x, (UINT)ir_intf->readIntegerEntry("GroundItem Offsets", "XOffset"), "X");
 
-	setOffset(OT_y, ir_intf->readIntegerEntry("GroundItem Offsets", "YOffset"), "Y");
+	setOffset(OT_y, (UINT)ir_intf->readIntegerEntry("GroundItem Offsets", "YOffset"), "Y");
 
-	setOffset(OT_z, ir_intf->readIntegerEntry("GroundItem Offsets", "ZOffset"), "Z");
+	setOffset(OT_z, (UINT)ir_intf->readIntegerEntry("GroundItem Offsets", "ZOffset"), "Z");
 
-	setOffset(OT_name, ir_intf->readIntegerEntry("GroundItem Offsets", "NameOffset"), "Model Name");
+	setOffset(OT_name, (UINT)ir_intf->readIntegerEntry("GroundItem Offsets", "NameOffset"), "Model Name");
 
  
 

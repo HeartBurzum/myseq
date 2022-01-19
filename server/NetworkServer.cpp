@@ -18,9 +18,12 @@
   ==============================================================================*/
 
 #include "StdAfx.h"
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
+
 #include "NetworkServer.h"
 #include <stdlib.h>
 #include <IPHlpApi.h>
+
 
 NetworkServer::NetworkServer()
 {
@@ -142,7 +145,7 @@ bool NetworkServer::openListenerSocket(bool service)
 		//Switch to Non-Blocking mode
 		WSAAsyncSelect (sockListener, hwnd, 1045, FD_READ | FD_CONNECT | FD_CLOSE | FD_ACCEPT); 
 
-		TCHAR active_address[128];
+		TCHAR active_address[128]{};
 		hostent* localHost;
 
 		localHost = gethostbyname("localhost");
@@ -237,9 +240,8 @@ void NetworkServer::openClientSocket()
 		SetDlgItemText(h_MySEQServer, IDC_TEXT_ZONE, _T(""));
 		SetDlgItemText(h_MySEQServer, IDC_TEXT_NAME, _T(""));
 	}
-			
+	
 	cout << "MySEQServer: New connection from: " << inet_ntoa(psockAddrIn->sin_addr) << endl;
-
 }
 
 void NetworkServer::closeClientSocket()
@@ -266,8 +268,8 @@ string NetworkServer::getCharName(MemReaderInterface* mr_intf)
 {
 	// get current character name
 	string rtn = "";
-	UINT pTemp = 0;
-	UINT nameOff;
+	QWORD pTemp = 0;
+	QWORD nameOff;
 			
 	if (offsets[OT_self])
 		pTemp = mr_intf->extractRAWPointer(offsets[OT_self]);
@@ -280,7 +282,7 @@ string NetworkServer::getCharName(MemReaderInterface* mr_intf)
 	return rtn;
 }
 
-void NetworkServer::setOffset(offset_types ot, UINT value)
+void NetworkServer::setOffset(offset_types ot, QWORD value)
 {
 	offsets[ot] = value;
 }
@@ -291,7 +293,7 @@ void NetworkServer::init(IniReaderInterface* ir_intf)
 	itemParser.init(ir_intf);
 	worldParser.init(ir_intf);
 	
-	port = ir_intf->readIntegerEntry("Port", "Port");
+	port = (UINT)ir_intf->readIntegerEntry("Port", "Port");
 	
 	setOffset(OT_spawnlist,	ir_intf->readIntegerEntry("Memory Offsets", "SpawnHeaderAddr"));
 	setOffset(OT_self,		ir_intf->readIntegerEntry("Memory Offsets", "CharInfo"));
@@ -309,12 +311,12 @@ void NetworkServer::init(IniReaderInterface* ir_intf)
 		TCHAR ot_ground[16];
 		TCHAR ot_world[16];
 		// Put in our offsets in a hex format
-		sprintf_s(ot_spawnlist,"0x%x",offsets[OT_spawnlist]);
-		sprintf_s(ot_self,"0x%x",offsets[OT_self]);
-		sprintf_s(ot_target,"0x%x",offsets[OT_target]);
-		sprintf_s(ot_zonename,"0x%x",offsets[OT_zonename]);
-		sprintf_s(ot_ground,"0x%x",offsets[OT_ground]);
-		sprintf_s(ot_world,"0x%x",offsets[OT_world]);
+		sprintf_s(ot_spawnlist,"0x%llx",offsets[OT_spawnlist]);
+		sprintf_s(ot_self,"0x%llx",offsets[OT_self]);
+		sprintf_s(ot_target,"0x%llx",offsets[OT_target]);
+		sprintf_s(ot_zonename,"0x%llx",offsets[OT_zonename]);
+		sprintf_s(ot_ground,"0x%llx",offsets[OT_ground]);
+		sprintf_s(ot_world,"0x%llx",offsets[OT_world]);
 		// Update the dialog
 		SetDlgItemText(h_MySEQServer, IDC_TEXT_SPAWNHEADER, ot_spawnlist);
 		SetDlgItemText(h_MySEQServer, IDC_TEXT_CHARINFO, ot_self);
@@ -345,7 +347,7 @@ UINT NetworkServer::current_offset(int type)
 bool NetworkServer::processReceivedData(MemReaderInterface* mr_intf)
 {
 	int bytesRecvd, maxLoop;
-	UINT pTemp, pTemp2;
+	QWORD pTemp, pTemp2;
 	string newZoneName;
 	int numSpawns = 0, numItems = 0, numElements;
 	
@@ -471,7 +473,7 @@ bool NetworkServer::processReceivedData(MemReaderInterface* mr_intf)
 	if ( requestContains(IPT_zone) )
 	{
 		if (offsets[OT_zonename])
-			newZoneName = mr_intf->extractString2(offsets[OT_zonename] - 0x400000 + (UINT)mr_intf->getCurrentBaseAddress());
+			newZoneName = mr_intf->extractString2(offsets[OT_zonename] - 0x140000000 + (QWORD)mr_intf->getCurrentBaseAddress());
 				
 		// Only send zonename response if zone changed
 		if ( newZoneName != zoneName )
@@ -524,6 +526,7 @@ bool NetworkServer::processReceivedData(MemReaderInterface* mr_intf)
 			
 		if (offsets[OT_spawnlist])
 			pTemp = pTemp2 = mr_intf->extractRAWPointer(offsets[OT_spawnlist]);
+			cout << "ptemp " << pTemp << " pTemp2 " << pTemp2 << endl;
 				
 		/* As of TSS, after shrouds or hover, this pointer may point to a spawn in the
 			middle of the list. Back up to the top of the spawn list just to be sure we
@@ -533,7 +536,10 @@ bool NetworkServer::processReceivedData(MemReaderInterface* mr_intf)
 			if (mr_intf->extractToBuffer(pTemp, spawnParser.rawBuffer, spawnParser.largestOffset))
 			{
 				if (spawnParser.extractPrevPointer())
+				{
 					pTemp = spawnParser.extractPrevPointer();
+					cout << "pTemp extract " << pTemp << " raw " << spawnParser.rawBuffer << " largest offset " << spawnParser.largestOffset << endl;
+				}
 				else
 					break;
 			}
@@ -547,7 +553,7 @@ bool NetworkServer::processReceivedData(MemReaderInterface* mr_intf)
 				cout << "MySEQServer: Warning: maxLoop reached finding pSpawnlist!" << endl;
 				
 			if (pTemp != pTemp2)
-				cout << "MySEQServer: pSpawnlist changed from INI setting of 0x" << hex << pTemp2 << endl;
+				cout << "MySEQServer: pSpawnlist changed from INI setting of 0x" << hex << pTemp2 << " to " << pTemp << endl;
 		}
 		loopCount++;
 							

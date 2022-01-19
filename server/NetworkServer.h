@@ -75,7 +75,7 @@ private:
 
 	int loopCount;
 
-	UINT offsets[OT_max];
+	QWORD offsets[OT_max];
 
 	bool quickInfo;
 
@@ -160,7 +160,7 @@ public:
 
 	void closeClientSocket();
 
-	void setOffset(offset_types ot, UINT value);
+	void setOffset(offset_types ot, QWORD value);
 
 	void init(IniReaderInterface* ir_intf);	
 

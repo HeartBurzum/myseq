@@ -184,11 +184,11 @@ string IniReader::readEscapeStrings(string section, string entry)
 }
 
 
-long IniReader::readIntegerEntry(string section, string entry, bool config)
+QWORD IniReader::readIntegerEntry(string section, string entry, bool config)
 
 {
 
-	long rtn=0;
+	QWORD rtn=0;
 	_TCHAR buffer[255];
 	if (GetPrivateProfileString(section.c_str(), entry.c_str(), TEXT(""), buffer, sizeof(buffer), config ? configfilename.c_str() : filename.c_str()) > 0)
 
@@ -198,11 +198,11 @@ long IniReader::readIntegerEntry(string section, string entry, bool config)
 
 		if ( buffer[0] == '0' )
 
-			rtn = strtol(buffer, NULL,16);
+			rtn = strtoull(buffer, NULL,16);
 
 		else
 
-			rtn = (long) atoi(buffer);
+			rtn = (QWORD) atoi(buffer);
 
 	}
 

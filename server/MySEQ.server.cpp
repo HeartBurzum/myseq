@@ -114,10 +114,9 @@ BOOL InstallService();
 
 BOOL DeleteService();
 
+
 void WINAPI ServiceMain(DWORD argc, LPTSTR *argv)
-
 {
-
   m_ServiceStatus.dwServiceType = SERVICE_WIN32;
 
   m_ServiceStatus.dwCurrentState = SERVICE_START_PENDING;
@@ -132,16 +131,11 @@ void WINAPI ServiceMain(DWORD argc, LPTSTR *argv)
 
   m_ServiceStatus.dwWaitHint = 0;
 
-  m_ServiceStatusHandle = RegisterServiceCtrlHandler(lpszServiceName, 
-
-                                            ServiceCtrlHandler); 
+  m_ServiceStatusHandle = RegisterServiceCtrlHandler(lpszServiceName, ServiceCtrlHandler); 
 
   if (m_ServiceStatusHandle == (SERVICE_STATUS_HANDLE)0)
-
   {
-
     return;
-
   }
 
   m_ServiceStatus.dwCurrentState = SERVICE_RUNNING;
@@ -151,7 +145,6 @@ void WINAPI ServiceMain(DWORD argc, LPTSTR *argv)
   m_ServiceStatus.dwWaitHint = 0;
 
   if (!SetServiceStatus (m_ServiceStatusHandle, &m_ServiceStatus))
-
   {
 
   }
@@ -159,9 +152,7 @@ void WINAPI ServiceMain(DWORD argc, LPTSTR *argv)
   bRunning=true;
 
   while(bRunning)
-
   {
-
     // Start up service
 
 	memReader.enableDebugPrivileges();
@@ -189,11 +180,8 @@ void WINAPI ServiceMain(DWORD argc, LPTSTR *argv)
 	netServer.init(&iniReader);
 
 	if ( memReader.openFirstProcess("eqgame") )
-
 	{
-
 		netServer.enterReceiveLoop(&memReader);	
-
 	}
 
 	netServer.closeClientSocket();
@@ -203,19 +191,15 @@ void WINAPI ServiceMain(DWORD argc, LPTSTR *argv)
 	WSACleanup();
 
 	Sleep(3000);
-
   }
 
   return;
-
 }
 
 
 
 void WINAPI ServiceCtrlHandler(DWORD Opcode)
-
 {
-
   switch(Opcode)
 
   {
@@ -257,24 +241,18 @@ void WINAPI ServiceCtrlHandler(DWORD Opcode)
   }
 
   return;
-
 }
 
 
 
 BOOL InstallService()
-
 {
-
 	SERVICE_DESCRIPTION sd;
-
 	LPTSTR szDesc = TEXT("This is the MySEQ Open Service for Everquest");
-
 	SC_HANDLE schSCManager;
-
 	SC_HANDLE schService;
-
 	TCHAR ServiceAppPath[MAX_PATH+1];
+
 
 	GetModuleFileNameA(0,ServiceAppPath,MAX_PATH);
 
@@ -292,89 +270,80 @@ BOOL InstallService()
 
 	schService = CreateService(schSCManager,lpszServiceName, 
 
-	lpszServiceNameDisplay, // service name to display
+					lpszServiceNameDisplay, // service name to display
 
-	SERVICE_ALL_ACCESS, // desired access 
+					SERVICE_ALL_ACCESS, // desired access 
 
-	SERVICE_WIN32_OWN_PROCESS, // service type 
+					SERVICE_WIN32_OWN_PROCESS, // service type 
 
-	SERVICE_AUTO_START, // start type  
+					SERVICE_AUTO_START, // start type  
 
-	SERVICE_ERROR_NORMAL, // error control type 
+					SERVICE_ERROR_NORMAL, // error control type 
 
-	lpszBinaryPathName, // service's binary 
+					lpszBinaryPathName, // service's binary 
 
-	NULL, // no load ordering group 
+					NULL, // no load ordering group 
 
-	NULL, // no tag identifier 
+					NULL, // no tag identifier 
 
-	NULL, // no dependencies
+					NULL, // no dependencies
 
-	NULL, // LocalSystem account
+					NULL, // LocalSystem account
 
-	NULL); // no password
+					NULL); // no password
 
   if (schService != NULL) {
-
 	  sd.lpDescription = szDesc;
 	  ChangeServiceConfig2(schService,SERVICE_CONFIG_DESCRIPTION,&sd);
-
   }
 
   if (schService == NULL) {
     return false; 
   }
+
   CloseServiceHandle(schService);
 
   return true;
-
 }
 
 
 
 BOOL DeleteService()
-
 {
-
   SC_HANDLE schSCManager;
-
   SC_HANDLE hService;
+
 
   schSCManager = OpenSCManager(NULL,NULL,SC_MANAGER_ALL_ACCESS);
 
   if (schSCManager == NULL)
-
     return false;
 
   hService=OpenService(schSCManager,lpszServiceName,SERVICE_ALL_ACCESS);
 
   if (hService == NULL)
-
     return false;
 
   if(DeleteService(hService)==0)
-
     return false;
 
   if(CloseServiceHandle(hService)==0)
-
     return false;
 
 return true;
-
 }
 
 // Entry Point for WinMain
 
-int APIENTRY _tWinMain(HINSTANCE hInstance,
-                     HINSTANCE hPrevInstance,
-                     LPTSTR    lpCmdLine,
-                     int       nCmdShow)
+int APIENTRY _tWinMain(_In_   HINSTANCE hInstance,
+                     _In_opt_ HINSTANCE hPrevInstance,
+                     _In_     LPTSTR    lpCmdLine,
+                     _In_     int       nCmdShow)
 {
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
 
-	MSG msg;
+	MSG msg = {0};
 	HACCEL hAccelTable;
 
 	// This is trigger for re-creating system tray icon if taskbar is restarted while minimized
@@ -386,8 +355,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	int argc = 0;
 	char** argv = NULL;
 
-	argc = ::__argc;
-	argv = ::__argv;
+	argc = __argc;
+	argv = __argv;
 
 	ReadArgs(argc,argv);
 
@@ -397,47 +366,34 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	{
 		arg = argv[1];
 		if(arg == "-i")
-
 		{
 			DeleteService();
 
 			if(InstallService())
-
 				MessageBox(NULL, "MySEQ Open Services Installed Sucessfully", "MySEQ Open Service Installer",0);
-
 			else
 				MessageBox(NULL, "Error Installing MySEQ Open Services", "MySEQ Open Service Installer",0);
 
-
 			return 0;
-
 		}
 
 		if(arg == "-d")
-
 		{
-
 			if(DeleteService())
-
 				MessageBox(NULL, "MySEQ Open Services UnInstalled Sucessfully", "MySEQ Open Service Uninstaller",0);
-			
 			else
 				MessageBox(NULL, "Error UnInstalling MySEQ Open Services", "MySEQ Open Service Uninstaller",0);
 
 			return 0;
-
 		}
 
 		if(arg == "-k")
-
 		{
-
 			SERVICE_TABLE_ENTRY DispatchTable[]= {{"MySEQServer",ServiceMain},{NULL,NULL}};
 
 			StartServiceCtrlDispatcher(DispatchTable);
 
 			return 0;
-
 		}
 	}
 
@@ -453,7 +409,6 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	}
 
 	if (argc > 1 && (!console_mode && !debug_mode && !services && !otherini))
-
 	{
 		string arg;
 
@@ -475,16 +430,13 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		strm << "Warning: Unknown parameters(s) '" << arg << "'" << ends ;
 
 		return 0;
-
 	}
 
 	if (debug_mode) {
-
 		cout << "========================" << endl <<
 				" MySEQ Server Debug Mode" << endl <<
 				"========================" << endl << endl;
 	} else if (!services) {
-
 		cout << "========================" << endl <<
 				"  MySEQServer v2.4.1.0  " << endl <<
 				"========================" << endl << endl <<
@@ -493,7 +445,6 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	}
 
 	// Debug priviledges allow us to peek inside the EQ process.
-
 	memReader.enableDebugPrivileges();
 
 	iniReader.openFile(iniFile);
@@ -506,19 +457,20 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		netServer.h_MySEQServer = h_MySEQServer;
 
 	if (!debug_mode) {
-		
 		netServer.init(&iniReader);
 
 		running = netServer.openListenerSocket(false);
 		LPCSTR patchdate;
 		patchdate = iniReader.patchDate.c_str();
 		server_status = 1;
-		SetDlgItemText(h_MySEQServer, IDC_TEXT_PATCH, patchdate);
-		SetDlgItemText(h_MySEQServer, IDC_TEXT_STATUS, "Listening");
-		SetDlgItemText(h_MySEQServer, IDC_TEXT_ZONE, "");
-		SetDlgItemText(h_MySEQServer, IDC_TEXT_NAME, "");
+		if (h_MySEQServer) {
+			SetDlgItemText(h_MySEQServer, IDC_TEXT_PATCH, patchdate);
+			SetDlgItemText(h_MySEQServer, IDC_TEXT_STATUS, "Listening");
+			SetDlgItemText(h_MySEQServer, IDC_TEXT_ZONE, "");
+			SetDlgItemText(h_MySEQServer, IDC_TEXT_NAME, "");
+		}
 
-		if (iniReader.GetStartMinimized()){
+		if (iniReader.GetStartMinimized()) {
 			Minimize();
 		} else {
 			Restore();
@@ -536,21 +488,18 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	int loop_counts = 0;
 
 	// Main message loop:
-	while (running)
-	{
-
+	while (running) {
 		GetMessage(&msg, NULL, 0, 0);
-		if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg) && !IsDialogMessage(h_MySEQServer, &msg ))
-		{
-
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
+		if (h_MySEQServer) {
+			if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg) && !IsDialogMessage(h_MySEQServer, &msg)) {
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
+			}
 		}
 	}
 
 	// debug never opens a listener socket
 	if (!debug_mode) {
-
 		netServer.closeClientSocket();
 
 		netServer.closeListenerSocket();
@@ -558,12 +507,13 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		WSACleanup();
 	}
 
-	if( !IsWindowVisible( h_MySEQServer ) )
-	{
-		Shell_NotifyIcon(NIM_DELETE, &g_notifyIconData);
+	if (h_MySEQServer) {
+		if (!IsWindowVisible(h_MySEQServer)) {
+			Shell_NotifyIcon(NIM_DELETE, &g_notifyIconData);
+		}
 	}
 
-	return (int) msg.wParam;
+	return (int)msg.wParam;
 }
 
 
@@ -623,8 +573,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	hWnd = CreateWindow(szWindowClass, szTitle, WS_SERVERWINDOW,
 		CW_USEDEFAULT, CW_USEDEFAULT, 300, 250, NULL, NULL, hInstance, NULL);
 
-	if (!hWnd)
-	{
+	if (!hWnd) {
 		return FALSE;
 	}
 
@@ -716,6 +665,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 		LPCSTR thisfilename = myfilename.c_str();
 		SetWindowText(h_MySEQServer, thisfilename);
 	}
+
 	if (debug_mode || console_mode) {
 		SendMessage(h_MyConsole, WM_SETICON, ICON_SMALL, (LPARAM) LoadIcon(hInstance, MAKEINTRESOURCE(IDI_MYSEQSERVER)));
 		SendMessage(h_MyConsole, WM_SETICON, ICON_BIG, (LPARAM) LoadIcon(hInstance, MAKEINTRESOURCE(IDI_MYSEQSERVER)));
@@ -754,8 +704,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	PAINTSTRUCT ps;
 	HDC hdc;
 
-	if ( message==WM_TASKBARCREATED && h_MySEQServer != NULL && !IsWindowVisible( h_MySEQServer ) )
-    {
+	if ( message==WM_TASKBARCREATED && h_MySEQServer != NULL && !IsWindowVisible( h_MySEQServer ) ) {
 		Minimize();
 		return 0;
 	}
@@ -781,9 +730,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                     netServer.closeClientSocket();
                     //WSACleanup();
 					server_status = 1;
-                    SetDlgItemText(h_MySEQServer, IDC_TEXT_STATUS, "Listening");
-					SetDlgItemText(h_MySEQServer, IDC_TEXT_ZONE, "");
-					SetDlgItemText(h_MySEQServer, IDC_TEXT_NAME, "");
+					if (h_MySEQServer) {
+						SetDlgItemText(h_MySEQServer, IDC_TEXT_STATUS, "Listening");
+						SetDlgItemText(h_MySEQServer, IDC_TEXT_ZONE, "");
+						SetDlgItemText(h_MySEQServer, IDC_TEXT_NAME, "");
+					}
 
                     fprintf(stdout,"Connection to MySEQ Client Lost.\n");                
                 break;
@@ -798,8 +749,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 						check_delay = (check_delay + 1) % 10;
 						if (check_delay == 2) {
 							if (!memReader.openFirstProcess("eqgame", false)) {
-								SetDlgItemText(h_MySEQServer, IDC_TEXT_ZONE, _T(""));
-								SetDlgItemText(h_MySEQServer, IDC_TEXT_NAME, _T(""));
+								if (h_MySEQServer) {
+									SetDlgItemText(h_MySEQServer, IDC_TEXT_ZONE, _T(""));
+									SetDlgItemText(h_MySEQServer, IDC_TEXT_NAME, _T(""));
+								}
 							}
 						}
 					}
@@ -818,8 +771,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 						server_status = 1;
 					else
 						server_status = 2;
-					SetDlgItemText(h_MySEQServer, IDC_TEXT_STATUS, "Connected");
-					check_delay = 0;
+					if (h_MySEQServer) {
+						SetDlgItemText(h_MySEQServer, IDC_TEXT_STATUS, "Connected");
+						check_delay = 0;
+					}
 					
 
                 }
@@ -829,11 +784,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				{
 					netServer.closeClientSocket();
 					server_status = 1;
-                    SetDlgItemText(h_MySEQServer, IDC_TEXT_STATUS, "Listening");
-					SetDlgItemText(h_MySEQServer, IDC_TEXT_ZONE, "");
-					SetDlgItemText(h_MySEQServer, IDC_TEXT_NAME, "");
+					if (h_MySEQServer) {
+						SetDlgItemText(h_MySEQServer, IDC_TEXT_STATUS, "Listening");
+						SetDlgItemText(h_MySEQServer, IDC_TEXT_ZONE, "");
+						SetDlgItemText(h_MySEQServer, IDC_TEXT_NAME, "");
+					}
 
-                    fprintf(stdout,"Connection to MySEQ Client Lost.\n");  
+                    fprintf(stdout,"Connection to MySEQ Client Lost.\n");
 				}
 				break;
 			}
@@ -903,11 +860,10 @@ INT_PTR CALLBACK ServerDialog(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 
 	switch (message)
 	{
-
 		case WM_INITDIALOG:
 			return (INT_PTR)TRUE;
 		case WM_CTLCOLORDLG:
-			return (LONG)g_hbrBackground;
+			return (INT_PTR)g_hbrBackground;
 		case WM_CTLCOLORSTATIC:
 			{
 				HDC hdcStatic = (HDC)wParam;
@@ -926,7 +882,7 @@ INT_PTR CALLBACK ServerDialog(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 						SetTextColor(hdcStatic, GetSysColor(COLOR_MENUTEXT));
 				}
 				SetBkMode(hdcStatic, TRANSPARENT);
-				return (LONG)g_hbrBackground;
+				return (INT_PTR)g_hbrBackground;
 			}
 			break;
 		case WM_COMMAND:
@@ -946,7 +902,8 @@ INT_PTR CALLBACK ServerDialog(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 					// Check in case notepad.exe not in C:\Windows
 					TCHAR basePath[_MAX_PATH+1];
 					TCHAR notePad[MAX_PATH+1];
-					GetWindowsDirectory(basePath, MAX_PATH);
+					if (!GetWindowsDirectory(basePath, MAX_PATH))
+						cout << "Windows directory lookup failed";
 					strcpy_s(notePad, basePath);
 					strcat_s(notePad, "\\NOTEPAD.exe");
 					if(_access(notePad,0) != 0) {
@@ -997,23 +954,22 @@ INT_PTR CALLBACK ServerDialog(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 			if (LOWORD(wParam) == IDC_BUTTON4)
 			{
 				// show dialog for smart offset finder
-				int ret = DialogBox(GetModuleHandle(NULL), MAKEINTRESOURCE(IDD_EQOFFSETSFINDER), h_MySEQServer, OffsetDialog);
+				DialogBox(GetModuleHandle(NULL), MAKEINTRESOURCE(IDD_EQOFFSETSFINDER), h_MySEQServer, OffsetDialog);
 			}
 			break;
 
 		case WM_SYSCOMMAND:
 			switch (wParam)
 			{
-			case SC_MINIMIZE:           
-				{                
-					// do stuff                
-					Minimize();
-					return (INT_PTR)TRUE;
+				case SC_MINIMIZE:           
+					{                
+						// do stuff                
+						Minimize();
+						return (INT_PTR)TRUE;
+						break;
+					}
+				default:
 					break;
-				}
-			default:
-				break;           
-							
 			}
 
 		case WM_TRAYICON:
@@ -1288,16 +1244,16 @@ INT_PTR CALLBACK OffsetDialog(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 }
 
 void ReadArgs(int argc, char* argv[])
-
 {
-
 	string arg;
+
 
 	if (argc > 1)
 
 		arg = argv[1];	
 
 	debug_mode = (arg == "debug");
+	debug_mode = FALSE;
 
 	console_mode = (arg == "console");
 
@@ -1306,7 +1262,6 @@ void ReadArgs(int argc, char* argv[])
 	otherini = (arg == "-f");
 
 	if ((arg == "-f") && (argc >2))
-
 	{
 		string::size_type index = string (argv[2]).find_last_of("\\/");
 		if (index != -1) {
@@ -1324,7 +1279,6 @@ void ReadArgs(int argc, char* argv[])
 	}
 	else if (arg == "-k") 
 	{
-
 		TCHAR AppPath[MAX_PATH+1];
 		string mypath;
 		iniFile[0] = _T('\0');
@@ -1355,7 +1309,6 @@ void ReadArgs(int argc, char* argv[])
 #endif
 	}
 	else
-
 	{
 		TCHAR AppPath[MAX_PATH+1];
 		string mypath;
@@ -1369,11 +1322,11 @@ void ReadArgs(int argc, char* argv[])
 		strcat_s(iniFile,"\\myseqserver.ini");
 		strcat_s(configIniFile, "\\config.ini");
 	}
-	
 }
 
-void DoDebugLoop( void *dummy ) {
 
+void DoDebugLoop( void *dummy )
+{
 	debugger.enterDebugLoop(&memReader, &iniReader);
 
 	running = false;
@@ -1381,17 +1334,15 @@ void DoDebugLoop( void *dummy ) {
 	ShowWindow(h_MyConsole, SW_HIDE);
 
 	ExitProcess(3);
-
 }
+
+
 void Minimize()
 {
 	// Update whether the Start Minimized is checked.
 	if (iniReader.GetStartMinimized())
-
 		CheckMenuItem(g_menu, ID_TRAY_START_MINIMIZED_MENU_ITEM, MF_CHECKED);
-
 	else
-
 		CheckMenuItem(g_menu, ID_TRAY_START_MINIMIZED_MENU_ITEM, MF_UNCHECKED);
 
   // add the icon to the system tray
@@ -1400,6 +1351,7 @@ void Minimize()
   // hide the console
   ShowWindow(h_MySEQServer, SW_HIDE);
 }
+
 
 void Restore()
 {
@@ -1410,9 +1362,9 @@ void Restore()
   ShowWindow(h_MySEQServer, SW_SHOW);
 }
 
+
 void ToggleStartMinimized()
 {
-
 	iniReader.ToggleStartMinimized();
 }
 

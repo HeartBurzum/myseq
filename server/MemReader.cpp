@@ -32,6 +32,8 @@
 
 #define TO_LOWER(str) (transform(str.begin(), str.end(), str.begin(), (int(*)(int))tolower))
 
+typedef uint64_t QWORD;
+
 
 
 MemReader::MemReader() :
@@ -47,7 +49,7 @@ MemReader::MemReader() :
 {
 	currentEQProcessID = 0;
 	currentEQProcessHandle = NULL;
-	currentEQProcessBaseAddress = 0x400000;
+	currentEQProcessBaseAddress = 0x140000000;
 }
 
 
@@ -82,7 +84,7 @@ DWORD MemReader::getCurrentPID()
 
 }
 
-DWORD MemReader::getCurrentBaseAddress()
+QWORD MemReader::getCurrentBaseAddress()
 
 {
 
@@ -145,7 +147,7 @@ bool MemReader::openFirstProcess(string filename, bool debug)
 
 	currentEQProcessID = 0;
 
-	currentEQProcessBaseAddress = 0x400000;
+	currentEQProcessBaseAddress = 0x140000000;
 
 	return openProcess(filename, true, debug);
 
@@ -291,7 +293,7 @@ bool MemReader::openProcess(string filename, bool first, bool debug)
 
 					currentEQProcessID = 0;
 
-					currentEQProcessBaseAddress = 0x400000;
+					currentEQProcessBaseAddress = 0x140000000;
 
 					currentEQProcessHandle = NULL;
 
@@ -305,24 +307,15 @@ bool MemReader::openProcess(string filename, bool first, bool debug)
 
 	} 
 
-
-
-	CloseHandle(hProcessSnap);
-
-	
+	if (hProcessSnap)
+		CloseHandle(hProcessSnap);
 
 	if (rtn)
-
-		cout << "MemReader: Found process ID " << dec << currentEQProcessID << " Base Address: 0x" << hex << (DWORD)currentEQProcessBaseAddress << endl;
-
+		cout << "MemReader: Found process ID " << dec << currentEQProcessID << " Base Address: 0x" << hex << currentEQProcessBaseAddress << endl;
 	else if (first)
-
 		cout << "MemReader: Failed to locate process '" << filename << "'" << endl;
 
-
-
 	return rtn;
-
 }
 
 
@@ -341,7 +334,7 @@ void MemReader::closeProcess()
 
 	currentEQProcessID = 0;
 
-	currentEQProcessBaseAddress = 0x400000;
+	currentEQProcessBaseAddress = 0x140000000;
 
 }
 
@@ -440,11 +433,11 @@ bool MemReader::validateProcess(bool forceCheck)
 
 
 
-UINT MemReader::extractPointer(UINT offset)
+QWORD MemReader::extractPointer(QWORD offset)
 
 {
 
-	UINT rtn = 0;
+	QWORD rtn = 0;
 
 	ReadProcessMemory(currentEQProcessHandle, (void*) offset,(void*) &rtn, sizeof(rtn), NULL);
 
@@ -452,13 +445,15 @@ UINT MemReader::extractPointer(UINT offset)
 
 }
 
-UINT MemReader::extractRAWPointer(UINT offset)
+QWORD MemReader::extractRAWPointer(QWORD offset)
 
 {
 
-	UINT rtn = 0;
+	QWORD rtn = 0;
 
-	ReadProcessMemory(currentEQProcessHandle, (void*) (offset - 0x400000 + currentEQProcessBaseAddress),(void*) &rtn, sizeof(rtn), NULL);
+	ReadProcessMemory(currentEQProcessHandle, (void*) (offset - 0x140000000 + currentEQProcessBaseAddress),(void*) &rtn, sizeof(rtn), NULL);
+
+	//cout << "offset " << offset << " currenteq " << currentEQProcessBaseAddress << endl;
 
 	return rtn;
 
@@ -466,10 +461,8 @@ UINT MemReader::extractRAWPointer(UINT offset)
 
 
 
-string MemReader::extractString(UINT offset)
-
+string MemReader::extractString(QWORD offset)
 {
-
 	string rtn("");
 
 	char buffer[50];
@@ -478,13 +471,12 @@ string MemReader::extractString(UINT offset)
 
 	ReadProcessMemory(currentEQProcessHandle, (void*) offset,(void*) buffer, 30, NULL);
 
-	rtn = buffer;
+	buffer[50 - 1] = 0;
 
-	return rtn;
-
+	return (string)buffer;
 }
 
-string MemReader::extractString2(UINT offset)
+string MemReader::extractString2(QWORD offset)
 
 {
 	// This one is for extracting a string that must begin with an alphanumeric
@@ -505,7 +497,7 @@ string MemReader::extractString2(UINT offset)
 }
 
 
-bool MemReader::extractToBuffer(UINT offset, char* buffer, UINT size) {
+bool MemReader::extractToBuffer(QWORD offset, char* buffer, UINT size) {
 	//better check if we can actually read this much memory... -eqmule 12/31 2014
 	//Basically if we ask ReadProcessMemory to read <size> bytes but the
 	//region we read from is smaller than <size> we end up in a scenario where we dont get ANY
@@ -516,10 +508,10 @@ bool MemReader::extractToBuffer(UINT offset, char* buffer, UINT size) {
 	MEMORY_BASIC_INFORMATION memInfo;
 	ZeroMemory(&memInfo, sizeof(MEMORY_BASIC_INFORMATION));
 
-	if(int vret = VirtualQueryEx(currentEQProcessHandle, lpAddressToReadFrom, &memInfo,sizeof(MEMORY_BASIC_INFORMATION))) {
+	if(int vret = (int)VirtualQueryEx(currentEQProcessHandle, lpAddressToReadFrom, &memInfo,sizeof(MEMORY_BASIC_INFORMATION))) {
 
-		int nBytesIntoRegion = lpAddressToReadFrom - (BYTE*)memInfo.BaseAddress;
-		int nBytesAwayFromEnd = memInfo.RegionSize - nBytesIntoRegion;
+		int nBytesIntoRegion = (int)(lpAddressToReadFrom - (BYTE*)memInfo.BaseAddress);
+		int nBytesAwayFromEnd = (int)(memInfo.RegionSize - nBytesIntoRegion);
 		int ActualNumberOfBytesToRead = min(nSizeUpperBound,nBytesAwayFromEnd);
 		if(ActualNumberOfBytesToRead<(int)size)
 			size = ActualNumberOfBytesToRead;
@@ -546,7 +538,7 @@ bool MemReader::extractToBuffer(UINT offset, char* buffer, UINT size) {
 
 
 
-float MemReader::extractFloat(UINT offset)
+float MemReader::extractFloat(QWORD offset)
 
 {
 
@@ -558,7 +550,7 @@ float MemReader::extractFloat(UINT offset)
 
 }
 
-BYTE MemReader::extractBYTE(UINT offset)
+BYTE MemReader::extractBYTE(QWORD offset)
 
 {
 
@@ -570,7 +562,7 @@ BYTE MemReader::extractBYTE(UINT offset)
 
 }
 
-UINT MemReader::extractUINT(UINT offset)
+UINT MemReader::extractUINT(QWORD offset)
 
 {
 
@@ -582,7 +574,7 @@ UINT MemReader::extractUINT(UINT offset)
 
 }
 
-DWORD MemReader::GetModuleBaseAddress(DWORD iProcId, TCHAR* DLLName)
+QWORD MemReader::GetModuleBaseAddress(DWORD iProcId, TCHAR* DLLName)
 {
 	HANDLE hSnap; // Process snapshot handle.
 	MODULEENTRY32 xModule; // Module information structure.
@@ -599,7 +591,7 @@ DWORD MemReader::GetModuleBaseAddress(DWORD iProcId, TCHAR* DLLName)
 		if (lstrcmpi (xModule.szModule, DLLName) == 0) // If this is the module we want...
 		{
 			CloseHandle(hSnap); // Free the handle.
-			return (DWORD)xModule.modBaseAddr; // return the base address.
+			return (QWORD)xModule.modBaseAddr; // return the base address.
 		}
 
 		bModule = Module32Next(hSnap, &xModule); // Loops through the rest of the modules.

@@ -34,19 +34,19 @@ struct itemBuffer_t
 
 {
 
-	DWORD id;
+	DWORD id{};
 
-	DWORD dropid;
+	DWORD dropid{};
 
-	float x;
+	float x{};
 
-	float y;
+	float y{};
 
-	float z;
+	float z{};
 
 	string name;
 
-	UINT flags;
+	UINT flags{};
 
 };
 
@@ -62,13 +62,13 @@ public:
 
 	enum offset_types { OT_prev, OT_next, OT_id, OT_dropid, OT_x, OT_y, OT_z, OT_name, OT_max };
 
-	UINT offsets[OT_max];
+	UINT offsets[OT_max]{};
 
 	UINT largestOffset;
 
 	string offsetNames[OT_max];
 
-	char *rawBuffer;
+	char* rawBuffer{};
 
 	itemBuffer_t tempItemBuffer;
 
@@ -83,6 +83,8 @@ private:
 	float extractRawFloat(offset_types ot)		{ return *((float*) &rawBuffer[offsets[ot]]); }
 
 	DWORD extractRawDWord(offset_types ot)		{ return *((DWORD*) &rawBuffer[offsets[ot]]); }
+
+	QWORD extractRawQWord(offset_types ot)      { return *((QWORD*) &rawBuffer[offsets[ot]]); }
 
 	BYTE extractRawByte(offset_types ot)		{ return *((BYTE*)  &rawBuffer[offsets[ot]]); }
 
@@ -112,9 +114,9 @@ public:
 
 	void clearNetBuffer()						{ itemList.clear(); }
 
-	UINT extractNextPointer()					{ return extractRawDWord(OT_next); }
+	QWORD extractNextPointer()					{ return extractRawQWord(OT_next); }
 
-	UINT extractPrevPointer()					{ return extractRawDWord(OT_prev); }
+	QWORD extractPrevPointer()					{ return extractRawQWord(OT_prev); }
 
 };
 
