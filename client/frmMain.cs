@@ -16,6 +16,8 @@ using System.Collections.Generic;
 
 using System.Diagnostics;
 
+using System.Text;
+
 using System.Windows.Forms;
 
 using System.ComponentModel;
@@ -56,7 +58,7 @@ namespace myseq
 
         public float rawScale = 1.0f;
 
-        public string BaseTitle = "MySEQ Open";
+        public string BaseTitle = "";
 
         private Point addTextFormLocation = new Point(0, 0);
 
@@ -200,6 +202,9 @@ namespace myseq
         private ToolStripMenuItem mnuSpawnCountdown;
         private ToolStripMenuItem mnuShowSpawnPoints;
         private ToolStripMenuItem mnuShowZoneText;
+        private ToolStripMenuItem mnuShowLayer1;
+        private ToolStripMenuItem mnuShowLayer2;
+        private ToolStripMenuItem mnuShowLayer3;
         private ToolStripMenuItem mnuShowPVP;
         private ToolStripMenuItem mnuShowPVPLevel;
         private ToolStripMenuItem mnuCollectMobTrails;
@@ -276,6 +281,9 @@ namespace myseq
         private ToolStripMenuItem mnuSpawnCountdown2;
         private ToolStripMenuItem mnuShowSpawnPoints2;
         private ToolStripMenuItem mnuShowZoneText2;
+        private ToolStripMenuItem mnuShowLayer21;
+        private ToolStripMenuItem mnuShowLayer22;
+        private ToolStripMenuItem mnuShowLayer23;
         private ToolStripMenuItem mnuShowPVP2;
         private ToolStripMenuItem mnuShowPVPLevel2;
         private ToolStripMenuItem mnuShowTargetInfo2;
@@ -336,11 +344,30 @@ namespace myseq
         private ToolStripMenuItem mnuShowMounts;
         private ToolStripMenuItem mnuShowFamiliars;
         private ToolStripMenuItem mnuShowPets;
+        private ToolStripMenuItem mnuShowLookupText;
+        private ToolStripMenuItem mnuShowLookupNumber;
+        private ToolStripMenuItem mnuAlwaysOnTop;
         private ToolStripSeparator toolStripSeparator8;
         private ToolStripSeparator toolStripSeparator9;
         private ToolStripLabel toolStripLabel1;
         public ToolStripTextBox toolStripLookupBox;
+        public ToolStripTextBox toolStripLookupBox1;
+        public ToolStripTextBox toolStripLookupBox2;
+        public ToolStripTextBox toolStripLookupBox3;
+        public ToolStripTextBox toolStripLookupBox4;
+        public ToolStripTextBox toolStripLookupBox5;
         private ToolStripButton toolStripResetLookup;
+        private ToolStripButton toolStripResetLookup1;
+        private ToolStripButton toolStripResetLookup2;
+        private ToolStripButton toolStripResetLookup3;
+        private ToolStripButton toolStripResetLookup4;
+        private ToolStripButton toolStripResetLookup5;
+        private ToolStripButton toolStripCheckLookup;
+        private ToolStripButton toolStripCheckLookup1;
+        private ToolStripButton toolStripCheckLookup2;
+        private ToolStripButton toolStripCheckLookup3;
+        private ToolStripButton toolStripCheckLookup4;
+        private ToolStripButton toolStripCheckLookup5;
         private ToolStripSeparator toolStripSepAddMapLabel;
         private ToolStripMenuItem toolbarsToolStripMenuItem;
         private ToolStripMenuItem mnuViewMenuBar;
@@ -361,8 +388,15 @@ namespace myseq
         public int gconLevel = -1;
         public string gConBaseName = "";
         private ToolStripMenuItem toolStripBasecon;
+
         private ToolStripButton toolStripDiscordAlerts;
-        bool bIsRunning = false;        
+        bool bIsRunning = false;
+        bool bFilter0 = false;
+        bool bFilter1 = false;
+        bool bFilter2 = false;
+        bool bFilter3 = false;
+        bool bFilter4 = false;
+        bool bFilter5 = false;
 
         public void StopListening() 
 
@@ -433,13 +467,9 @@ namespace myseq
             String newDiscordFile = Path.Combine(myPath, "discord.xml");
 
             if (File.Exists(newSMTPFile))
-            {
                 SMTPSettings.Instance.Load(newSMTPFile);
-            }
             else
-            {
                 SMTPSettings.Instance.Load("myseq.xml");
-            }
 
             if (File.Exists(newDiscordFile))
                 DiscordSettings.Instance.Load(newDiscordFile);
@@ -569,6 +599,12 @@ namespace myseq
 
                 GroundItemList.DockState = DockState.DockLeft;
 
+            }
+
+            if (Settings.Instance.AlwaysOnTop)
+            {
+                this.TopMost = true;
+                this.TopLevel = true;
             }
 
             // Add the Columns to the Spawn List Window
@@ -763,21 +799,21 @@ namespace myseq
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            WeifenLuo.WinFormsUI.Docking.DockPanelSkin dockPanelSkin2 = new WeifenLuo.WinFormsUI.Docking.DockPanelSkin();
-            WeifenLuo.WinFormsUI.Docking.AutoHideStripSkin autoHideStripSkin2 = new WeifenLuo.WinFormsUI.Docking.AutoHideStripSkin();
-            WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient4 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
-            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient8 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
-            WeifenLuo.WinFormsUI.Docking.DockPaneStripSkin dockPaneStripSkin2 = new WeifenLuo.WinFormsUI.Docking.DockPaneStripSkin();
-            WeifenLuo.WinFormsUI.Docking.DockPaneStripGradient dockPaneStripGradient2 = new WeifenLuo.WinFormsUI.Docking.DockPaneStripGradient();
-            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient9 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
-            WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient5 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
-            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient10 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
-            WeifenLuo.WinFormsUI.Docking.DockPaneStripToolWindowGradient dockPaneStripToolWindowGradient2 = new WeifenLuo.WinFormsUI.Docking.DockPaneStripToolWindowGradient();
-            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient11 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
-            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient12 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
-            WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient6 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
-            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient13 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
-            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient14 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            WeifenLuo.WinFormsUI.Docking.DockPanelSkin dockPanelSkin1 = new WeifenLuo.WinFormsUI.Docking.DockPanelSkin();
+            WeifenLuo.WinFormsUI.Docking.AutoHideStripSkin autoHideStripSkin1 = new WeifenLuo.WinFormsUI.Docking.AutoHideStripSkin();
+            WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient1 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient1 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            WeifenLuo.WinFormsUI.Docking.DockPaneStripSkin dockPaneStripSkin1 = new WeifenLuo.WinFormsUI.Docking.DockPaneStripSkin();
+            WeifenLuo.WinFormsUI.Docking.DockPaneStripGradient dockPaneStripGradient1 = new WeifenLuo.WinFormsUI.Docking.DockPaneStripGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient2 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient2 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient3 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            WeifenLuo.WinFormsUI.Docking.DockPaneStripToolWindowGradient dockPaneStripToolWindowGradient1 = new WeifenLuo.WinFormsUI.Docking.DockPaneStripToolWindowGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient4 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient5 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient3 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient6 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient7 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
             this.mnuMainMenu = new System.Windows.Forms.MenuStrip();
             this.mnuFileMain = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuOptions = new System.Windows.Forms.ToolStripMenuItem();
@@ -866,6 +902,9 @@ namespace myseq
             this.mnuFilterPlayerCorpses = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuFilterGroundItems = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuFilterSpawnPoints = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuShowLookupText = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuShowLookupNumber = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuAlwaysOnTop = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuForceDistinct = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuForceDistinctText = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
@@ -878,6 +917,9 @@ namespace myseq
             this.mnuSpawnCountdown = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuShowSpawnPoints = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuShowZoneText = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuShowLayer1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuShowLayer2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuShowLayer3 = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuShowPVP = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuShowPVPLevel = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuCollectMobTrails = new System.Windows.Forms.ToolStripMenuItem();
@@ -930,6 +972,9 @@ namespace myseq
             this.mnuSpawnCountdown2 = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuShowSpawnPoints2 = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuShowZoneText2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuShowLayer21 = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuShowLayer22 = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuShowLayer23 = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuShowPVP2 = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuShowPVPLevel2 = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuShowTargetInfo2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -1002,6 +1047,22 @@ namespace myseq
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripLookupBox = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripResetLookup = new System.Windows.Forms.ToolStripButton();
+            this.toolStripLookupBox1 = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripResetLookup1 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripLookupBox2 = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripResetLookup2 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripLookupBox3 = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripResetLookup3 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripLookupBox4 = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripResetLookup4 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripLookupBox5 = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripCheckLookup = new System.Windows.Forms.ToolStripButton();
+            this.toolStripCheckLookup1 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripCheckLookup2 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripCheckLookup3 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripCheckLookup4 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripCheckLookup5 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripResetLookup5 = new System.Windows.Forms.ToolStripButton();
             this.toolStripOptions = new System.Windows.Forms.ToolStripButton();
             this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             this.toolStripDiscordAlerts = new System.Windows.Forms.ToolStripButton();
@@ -1506,7 +1567,10 @@ namespace myseq
             this.mnuShowMounts,
             this.mnuShowFamiliars,
             this.mnuShowPets,
-            this.mnuShowNPCs});
+            this.mnuShowNPCs,
+            this.mnuShowLookupText,
+            this.mnuShowLookupNumber,
+            this.mnuAlwaysOnTop});
             this.mnuViewMain.Name = "mnuViewMain";
             this.mnuViewMain.Size = new System.Drawing.Size(44, 20);
             this.mnuViewMain.Text = "&View";
@@ -1667,6 +1731,27 @@ namespace myseq
             this.mnuShowNPCs.Text = "NPCs";
             this.mnuShowNPCs.Click += new System.EventHandler(this.mnuShowNPCs_Click);
             // 
+            // mnuShowLookupText
+            // 
+            this.mnuShowLookupText.Name = "mnuShowLookupText";
+            this.mnuShowLookupText.Size = new System.Drawing.Size(172, 22);
+            this.mnuShowLookupText.Text = "Lookup Text";
+            this.mnuShowLookupText.Click += new System.EventHandler(this.mnuShowLookupText_Click);
+            // 
+            // mnuShowLookupNumber
+            // 
+            this.mnuShowLookupNumber.Name = "mnuShowLookupNumber";
+            this.mnuShowLookupNumber.Size = new System.Drawing.Size(172, 22);
+            this.mnuShowLookupNumber.Text = "Lookup Name/Number";
+            this.mnuShowLookupNumber.Click += new System.EventHandler(this.mnuShowLookupNumber_Click);
+            // 
+            // mnuAlwaysOnTop
+            // 
+            this.mnuAlwaysOnTop.Name = "mnuAlwaysOnTop";
+            this.mnuAlwaysOnTop.Size = new System.Drawing.Size(172, 22);
+            this.mnuAlwaysOnTop.Text = "Always On Top";
+            this.mnuAlwaysOnTop.Click += new System.EventHandler(this.mnuAlwaysOnTop_Click);
+            // 
             // mnuMapSettingsMain
             // 
             this.mnuMapSettingsMain.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1815,6 +1900,9 @@ namespace myseq
             this.mnuSpawnCountdown,
             this.mnuShowSpawnPoints,
             this.mnuShowZoneText,
+            this.mnuShowLayer1,
+            this.mnuShowLayer2,
+            this.mnuShowLayer3,
             this.mnuShowPVP,
             this.mnuShowPVPLevel});
             this.mnuLabelShow.Name = "mnuLabelShow";
@@ -1883,6 +1971,27 @@ namespace myseq
             this.mnuShowZoneText.Size = new System.Drawing.Size(186, 22);
             this.mnuShowZoneText.Text = "&Zone Text";
             this.mnuShowZoneText.Click += new System.EventHandler(this.mnuShowZoneText_Click);
+            // 
+            // mnuShowLayer1
+            // 
+            this.mnuShowLayer1.Name = "mnuShowLayer1";
+            this.mnuShowLayer1.Size = new System.Drawing.Size(186, 22);
+            this.mnuShowLayer1.Text = "&Show Layer 1";
+            this.mnuShowLayer1.Click += new System.EventHandler(this.mnuShowLayer1_Click);
+            // 
+            // mnuShowLayer2
+            // 
+            this.mnuShowLayer2.Name = "mnuShowLayer2";
+            this.mnuShowLayer2.Size = new System.Drawing.Size(186, 22);
+            this.mnuShowLayer2.Text = "&Show Layer 2";
+            this.mnuShowLayer2.Click += new System.EventHandler(this.mnuShowLayer2_Click);
+            // 
+            // mnuShowLayer3
+            // 
+            this.mnuShowLayer3.Name = "mnuShowLayer23";
+            this.mnuShowLayer3.Size = new System.Drawing.Size(186, 22);
+            this.mnuShowLayer3.Text = "&Show Layer 3";
+            this.mnuShowLayer3.Click += new System.EventHandler(this.mnuShowLayer3_Click);
             // 
             // mnuShowPVP
             // 
@@ -2237,6 +2346,9 @@ namespace myseq
             this.mnuSpawnCountdown2,
             this.mnuShowSpawnPoints2,
             this.mnuShowZoneText2,
+            this.mnuShowLayer21,
+            this.mnuShowLayer22,
+            this.mnuShowLayer23,
             this.mnuShowPVP2,
             this.mnuShowPVPLevel2});
             this.mnuLabelShow2.Name = "mnuLabelShow2";
@@ -2298,6 +2410,27 @@ namespace myseq
             this.mnuShowZoneText2.Size = new System.Drawing.Size(186, 22);
             this.mnuShowZoneText2.Text = "&Zone Text";
             this.mnuShowZoneText2.Click += new System.EventHandler(this.mnuShowZoneText_Click);
+            // 
+            // mnuShowLayer21
+            // 
+            this.mnuShowLayer21.Name = "mnuShowLayer21";
+            this.mnuShowLayer21.Size = new System.Drawing.Size(186, 22);
+            this.mnuShowLayer21.Text = "&Show Layer 1";
+            this.mnuShowLayer21.Click += new System.EventHandler(this.mnuShowLayer1_Click);
+            // 
+            // mnuShowLayer22
+            // 
+            this.mnuShowLayer22.Name = "mnuShowLayer22";
+            this.mnuShowLayer22.Size = new System.Drawing.Size(186, 22);
+            this.mnuShowLayer22.Text = "&Show Layer 2";
+            this.mnuShowLayer22.Click += new System.EventHandler(this.mnuShowLayer2_Click);
+            // 
+            // mnuShowLayer23
+            // 
+            this.mnuShowLayer23.Name = "mnuShowLayer23";
+            this.mnuShowLayer23.Size = new System.Drawing.Size(186, 22);
+            this.mnuShowLayer23.Text = "&Show Layer 3";
+            this.mnuShowLayer23.Click += new System.EventHandler(this.mnuShowLayer3_Click);
             // 
             // mnuShowPVP2
             // 
@@ -2677,7 +2810,23 @@ namespace myseq
             this.toolStripSeparator19,
             this.toolStripLabel1,
             this.toolStripLookupBox,
+            this.toolStripCheckLookup,
             this.toolStripResetLookup,
+            this.toolStripLookupBox1,
+            this.toolStripCheckLookup1,
+            this.toolStripResetLookup1,
+            this.toolStripLookupBox2,
+            this.toolStripCheckLookup2,
+            this.toolStripResetLookup2,
+            this.toolStripLookupBox3,
+            this.toolStripCheckLookup3,
+            this.toolStripResetLookup3,
+            this.toolStripLookupBox4,
+            this.toolStripCheckLookup4,
+            this.toolStripResetLookup4,
+            this.toolStripLookupBox5,
+            this.toolStripCheckLookup5,
+            this.toolStripResetLookup5,
             this.toolStripOptions});
             this.toolBarStrip.Location = new System.Drawing.Point(0, 24);
             this.toolBarStrip.Name = "toolBarStrip";
@@ -3013,11 +3162,11 @@ namespace myseq
             // 
             this.toolStripLookupBox.ForeColor = System.Drawing.SystemColors.GrayText;
             this.toolStripLookupBox.Name = "toolStripLookupBox";
-            this.toolStripLookupBox.Size = new System.Drawing.Size(100, 23);
+            this.toolStripLookupBox.Size = new System.Drawing.Size(100, 25);
             this.toolStripLookupBox.Text = "Mob Search";
             this.toolStripLookupBox.ToolTipText = "Type in mob name and press Enter.";
             this.toolStripLookupBox.Leave += new System.EventHandler(this.toolStripLookupBox_Leave);
-            this.toolStripLookupBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.toolStripTextBox1_KeyPress);
+            this.toolStripLookupBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.toolStripTextBox_KeyPress);
             this.toolStripLookupBox.Click += new System.EventHandler(this.toolStripLookupBox_Click);
             // 
             // toolStripResetLookup
@@ -3029,6 +3178,189 @@ namespace myseq
             this.toolStripResetLookup.Text = "Reset";
             this.toolStripResetLookup.ToolTipText = "Reset Find Mob Search String";
             this.toolStripResetLookup.Click += new System.EventHandler(this.toolStripResetLookup_Click);
+            // 
+            // toolStripLookupBox1
+            // 
+            this.toolStripLookupBox1.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.toolStripLookupBox1.Name = "toolStripLookupBox1";
+            this.toolStripLookupBox1.Size = new System.Drawing.Size(100, 23);
+            this.toolStripLookupBox1.Text = "Mob Search";
+            this.toolStripLookupBox1.ToolTipText = "Type in mob name and press Enter.";
+            this.toolStripLookupBox1.Leave += new System.EventHandler(this.toolStripLookupBox1_Leave);
+            this.toolStripLookupBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.toolStripTextBox1_KeyPress);
+            this.toolStripLookupBox1.Click += new System.EventHandler(this.toolStripLookupBox1_Click);
+            // 
+            // toolStripResetLookup1
+            // 
+            this.toolStripResetLookup1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripResetLookup1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripResetLookup1.Name = "toolStripResetLookup1";
+            this.toolStripResetLookup1.Size = new System.Drawing.Size(39, 19);
+            this.toolStripResetLookup1.Text = "Reset";
+            this.toolStripResetLookup1.ToolTipText = "Reset Find Mob Search String";
+            this.toolStripResetLookup1.Click += new System.EventHandler(this.toolStripResetLookup1_Click);
+            // 
+            // toolStripLookupBox2
+            // 
+            this.toolStripLookupBox2.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.toolStripLookupBox2.Name = "toolStripLookupBox2";
+            this.toolStripLookupBox2.Size = new System.Drawing.Size(132, 23);
+            this.toolStripLookupBox2.Text = "Mob Search";
+            this.toolStripLookupBox2.ToolTipText = "Type in mob name and press Enter.";
+            this.toolStripLookupBox2.Leave += new System.EventHandler(this.toolStripLookupBox2_Leave);
+            this.toolStripLookupBox2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.toolStripTextBox2_KeyPress);
+            this.toolStripLookupBox2.Click += new System.EventHandler(this.toolStripLookupBox2_Click);
+            // 
+            // toolStripResetLookup2
+            // 
+            this.toolStripResetLookup2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripResetLookup2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripResetLookup2.Name = "toolStripResetLookup2";
+            this.toolStripResetLookup2.Size = new System.Drawing.Size(39, 19);
+            this.toolStripResetLookup2.Text = "Reset";
+            this.toolStripResetLookup2.ToolTipText = "Reset Find Mob Search String";
+            this.toolStripResetLookup2.Click += new System.EventHandler(this.toolStripResetLookup2_Click);
+            // 
+            // toolStripLookupBox3
+            // 
+            this.toolStripLookupBox3.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.toolStripLookupBox3.Name = "toolStripLookupBox3";
+            this.toolStripLookupBox3.Size = new System.Drawing.Size(132, 23);
+            this.toolStripLookupBox3.Text = "Mob Search";
+            this.toolStripLookupBox3.ToolTipText = "Type in mob name and press Enter.";
+            this.toolStripLookupBox3.Leave += new System.EventHandler(this.toolStripLookupBox3_Leave);
+            this.toolStripLookupBox3.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.toolStripTextBox3_KeyPress);
+            this.toolStripLookupBox3.Click += new System.EventHandler(this.toolStripLookupBox3_Click);
+            // 
+            // toolStripResetLookup3
+            // 
+            this.toolStripResetLookup3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripResetLookup3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripResetLookup3.Name = "toolStripResetLookup3";
+            this.toolStripResetLookup3.Size = new System.Drawing.Size(39, 19);
+            this.toolStripResetLookup3.Text = "Reset";
+            this.toolStripResetLookup3.ToolTipText = "Reset Find Mob Search String";
+            this.toolStripResetLookup3.Click += new System.EventHandler(this.toolStripResetLookup3_Click);
+            // 
+            // toolStripLookupBox4
+            // 
+            this.toolStripLookupBox4.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.toolStripLookupBox4.Name = "toolStripLookupBox4";
+            this.toolStripLookupBox4.Size = new System.Drawing.Size(132, 23);
+            this.toolStripLookupBox4.Text = "Mob Search";
+            this.toolStripLookupBox4.ToolTipText = "Type in mob name and press Enter.";
+            this.toolStripLookupBox4.Leave += new System.EventHandler(this.toolStripLookupBox2_Leave);
+            this.toolStripLookupBox4.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.toolStripTextBox4_KeyPress);
+            this.toolStripLookupBox4.Click += new System.EventHandler(this.toolStripLookupBox4_Click);
+            // 
+            // toolStripResetLookup4
+            // 
+            this.toolStripResetLookup4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripResetLookup4.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripResetLookup4.Name = "toolStripResetLookup4";
+            this.toolStripResetLookup4.Size = new System.Drawing.Size(39, 19);
+            this.toolStripResetLookup4.Text = "Reset";
+            this.toolStripResetLookup4.ToolTipText = "Reset Find Mob Search String";
+            this.toolStripResetLookup4.Click += new System.EventHandler(this.toolStripResetLookup4_Click);
+            // 
+            // toolStripLookupBox5
+            // 
+            this.toolStripLookupBox5.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.toolStripLookupBox5.Name = "toolStripLookupBox5";
+            this.toolStripLookupBox5.Size = new System.Drawing.Size(132, 23);
+            this.toolStripLookupBox5.Text = "Mob Search";
+            this.toolStripLookupBox5.ToolTipText = "Type in mob name and press Enter.";
+            this.toolStripLookupBox5.Leave += new System.EventHandler(this.toolStripLookupBox5_Leave);
+            this.toolStripLookupBox5.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.toolStripTextBox5_KeyPress);
+            this.toolStripLookupBox5.Click += new System.EventHandler(this.toolStripLookupBox5_Click);
+            // 
+            // toolStripCheckLookup
+            // 
+            this.toolStripCheckLookup.CheckOnClick = true;
+            this.toolStripCheckLookup.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.ImageAndText;
+            this.toolStripCheckLookup.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripCheckLookup.Name = "toolStripCheckLookup";
+            this.toolStripCheckLookup.Size = new System.Drawing.Size(51, 19);
+            this.toolStripCheckLookup.Text = "L";
+            this.toolStripCheckLookup.ToolTipText = "Lookup or Filter";
+            this.toolStripCheckLookup.CheckedChanged += new System.EventHandler(this.toolStripCheckLookup_CheckChanged);
+            this.toolStripCheckLookup.Checked = true;
+            this.toolStripCheckLookup.BackColor = Color.Gray;
+            // 
+            // toolStripCheckLookup1
+            // 
+            this.toolStripCheckLookup1.CheckOnClick = true;
+            this.toolStripCheckLookup1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.ImageAndText;
+            this.toolStripCheckLookup1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripCheckLookup1.Name = "toolStripCheckLookup1";
+            this.toolStripCheckLookup1.Size = new System.Drawing.Size(51, 19);
+            this.toolStripCheckLookup1.Text = "L";
+            this.toolStripCheckLookup1.ToolTipText = "Lookup or Filter";
+            this.toolStripCheckLookup1.CheckedChanged += new System.EventHandler(this.toolStripCheckLookup1_CheckChanged);
+            this.toolStripCheckLookup1.Checked = true;
+            this.toolStripCheckLookup1.BackColor = Color.Gray;
+            // 
+            // toolStripCheckLookup2
+            // 
+            this.toolStripCheckLookup2.CheckOnClick = true;
+            this.toolStripCheckLookup2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.ImageAndText;
+            this.toolStripCheckLookup2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripCheckLookup2.Name = "toolStripCheckLookup2";
+            this.toolStripCheckLookup2.Size = new System.Drawing.Size(51, 19);
+            this.toolStripCheckLookup2.Text = "L";
+            this.toolStripCheckLookup2.ToolTipText = "Lookup or Filter";
+            this.toolStripCheckLookup2.CheckedChanged += new System.EventHandler(this.toolStripCheckLookup2_CheckChanged);
+            this.toolStripCheckLookup2.Checked = true;
+            this.toolStripCheckLookup2.BackColor = Color.Gray;
+            // 
+            // toolStripCheckLookup3
+            // 
+            this.toolStripCheckLookup3.CheckOnClick = true;
+            this.toolStripCheckLookup3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.ImageAndText;
+            this.toolStripCheckLookup3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripCheckLookup3.Name = "toolStripCheckLookup3";
+            this.toolStripCheckLookup3.Size = new System.Drawing.Size(51, 19);
+            this.toolStripCheckLookup3.Text = "L";
+            this.toolStripCheckLookup3.ToolTipText = "Lookup or Filter";
+            this.toolStripCheckLookup3.CheckedChanged += new System.EventHandler(this.toolStripCheckLookup3_CheckChanged);
+            this.toolStripCheckLookup3.Checked = true;
+            this.toolStripCheckLookup3.BackColor = Color.Gray;
+            // 
+            // toolStripCheckLookup4
+            // 
+            this.toolStripCheckLookup4.CheckOnClick = true;
+            this.toolStripCheckLookup4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.ImageAndText;
+            this.toolStripCheckLookup4.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripCheckLookup4.Name = "toolStripCheckLookup4";
+            this.toolStripCheckLookup4.Size = new System.Drawing.Size(51, 19);
+            this.toolStripCheckLookup4.Text = "L";
+            this.toolStripCheckLookup4.ToolTipText = "Lookup or Filter";
+            this.toolStripCheckLookup4.CheckedChanged += new System.EventHandler(this.toolStripCheckLookup4_CheckChanged);
+            this.toolStripCheckLookup4.Checked = true;
+            this.toolStripCheckLookup4.BackColor = Color.Gray;
+            // 
+            // toolStripCheckLookup5
+            // 
+            this.toolStripCheckLookup5.CheckOnClick = true;
+            this.toolStripCheckLookup5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.ImageAndText;
+            this.toolStripCheckLookup5.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripCheckLookup5.Name = "toolStripCheckLookup5";
+            this.toolStripCheckLookup5.Size = new System.Drawing.Size(51, 19);
+            this.toolStripCheckLookup5.Text = "L";
+            this.toolStripCheckLookup5.ToolTipText = "Lookup or Filter";
+            this.toolStripCheckLookup5.CheckedChanged += new System.EventHandler(this.toolStripCheckLookup5_CheckChanged);
+            this.toolStripCheckLookup5.Checked = true;
+            this.toolStripCheckLookup5.BackColor = Color.Gray;
+            // 
+            // toolStripResetLookup5
+            // 
+            this.toolStripResetLookup5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripResetLookup5.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripResetLookup5.Name = "toolStripResetLookup5";
+            this.toolStripResetLookup5.Size = new System.Drawing.Size(39, 19);
+            this.toolStripResetLookup5.Text = "Reset";
+            this.toolStripResetLookup5.ToolTipText = "Reset Find Mob Search String";
+            this.toolStripResetLookup5.Click += new System.EventHandler(this.toolStripResetLookup5_Click);
             // 
             // toolStripOptions
             // 
@@ -3051,54 +3383,54 @@ namespace myseq
             this.dockPanel.Location = new System.Drawing.Point(0, 49);
             this.dockPanel.Name = "dockPanel";
             this.dockPanel.Size = new System.Drawing.Size(800, 458);
-            dockPanelGradient4.EndColor = System.Drawing.SystemColors.ControlLight;
-            dockPanelGradient4.StartColor = System.Drawing.SystemColors.ControlLight;
-            autoHideStripSkin2.DockStripGradient = dockPanelGradient4;
-            tabGradient8.EndColor = System.Drawing.SystemColors.Control;
-            tabGradient8.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
-            tabGradient8.StartColor = System.Drawing.SystemColors.ControlLightLight;
-            tabGradient8.TextColor = System.Drawing.SystemColors.ControlDarkDark;
-            autoHideStripSkin2.TabGradient = tabGradient8;
-            autoHideStripSkin2.TextFont = new System.Drawing.Font("Tahoma", 8.25F);
-            dockPanelSkin2.AutoHideStripSkin = autoHideStripSkin2;
-            tabGradient9.EndColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            tabGradient9.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
-            tabGradient9.StartColor = System.Drawing.SystemColors.ControlLight;
-            tabGradient9.TextColor = System.Drawing.SystemColors.ControlText;
-            dockPaneStripGradient2.ActiveTabGradient = tabGradient9;
-            dockPanelGradient5.EndColor = System.Drawing.SystemColors.Control;
-            dockPanelGradient5.StartColor = System.Drawing.SystemColors.Control;
-            dockPaneStripGradient2.DockStripGradient = dockPanelGradient5;
-            tabGradient10.EndColor = System.Drawing.SystemColors.ControlLight;
-            tabGradient10.StartColor = System.Drawing.SystemColors.ControlLight;
-            tabGradient10.TextColor = System.Drawing.SystemColors.ControlText;
-            dockPaneStripGradient2.InactiveTabGradient = tabGradient10;
-            dockPaneStripSkin2.DocumentGradient = dockPaneStripGradient2;
-            dockPaneStripSkin2.TextFont = new System.Drawing.Font("Tahoma", 8.25F);
-            tabGradient11.EndColor = System.Drawing.SystemColors.ActiveCaption;
-            tabGradient11.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
-            tabGradient11.StartColor = System.Drawing.SystemColors.GradientActiveCaption;
-            tabGradient11.TextColor = System.Drawing.SystemColors.ActiveCaptionText;
-            dockPaneStripToolWindowGradient2.ActiveCaptionGradient = tabGradient11;
-            tabGradient12.EndColor = System.Drawing.SystemColors.Control;
-            tabGradient12.StartColor = System.Drawing.SystemColors.Control;
-            tabGradient12.TextColor = System.Drawing.SystemColors.ControlText;
-            dockPaneStripToolWindowGradient2.ActiveTabGradient = tabGradient12;
-            dockPanelGradient6.EndColor = System.Drawing.SystemColors.ControlLight;
-            dockPanelGradient6.StartColor = System.Drawing.SystemColors.ControlLight;
-            dockPaneStripToolWindowGradient2.DockStripGradient = dockPanelGradient6;
-            tabGradient13.EndColor = System.Drawing.SystemColors.ActiveBorder;
-            tabGradient13.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
-            tabGradient13.StartColor = System.Drawing.SystemColors.ActiveBorder;
-            tabGradient13.TextColor = System.Drawing.SystemColors.ControlText;
-            dockPaneStripToolWindowGradient2.InactiveCaptionGradient = tabGradient13;
-            tabGradient14.EndColor = System.Drawing.Color.Transparent;
-            tabGradient14.StartColor = System.Drawing.Color.Transparent;
-            tabGradient14.TextColor = System.Drawing.SystemColors.ControlDarkDark;
-            dockPaneStripToolWindowGradient2.InactiveTabGradient = tabGradient14;
-            dockPaneStripSkin2.ToolWindowGradient = dockPaneStripToolWindowGradient2;
-            dockPanelSkin2.DockPaneStripSkin = dockPaneStripSkin2;
-            this.dockPanel.Skin = dockPanelSkin2;
+            dockPanelGradient1.EndColor = System.Drawing.SystemColors.ControlLight;
+            dockPanelGradient1.StartColor = System.Drawing.SystemColors.ControlLight;
+            autoHideStripSkin1.DockStripGradient = dockPanelGradient1;
+            tabGradient1.EndColor = System.Drawing.SystemColors.Control;
+            tabGradient1.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
+            tabGradient1.StartColor = System.Drawing.SystemColors.ControlLightLight;
+            tabGradient1.TextColor = System.Drawing.SystemColors.ControlDarkDark;
+            autoHideStripSkin1.TabGradient = tabGradient1;
+            autoHideStripSkin1.TextFont = new System.Drawing.Font("Tahoma", 8.25F);
+            dockPanelSkin1.AutoHideStripSkin = autoHideStripSkin1;
+            tabGradient2.EndColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            tabGradient2.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
+            tabGradient2.StartColor = System.Drawing.SystemColors.ControlLight;
+            tabGradient2.TextColor = System.Drawing.SystemColors.ControlText;
+            dockPaneStripGradient1.ActiveTabGradient = tabGradient2;
+            dockPanelGradient2.EndColor = System.Drawing.SystemColors.Control;
+            dockPanelGradient2.StartColor = System.Drawing.SystemColors.Control;
+            dockPaneStripGradient1.DockStripGradient = dockPanelGradient2;
+            tabGradient3.EndColor = System.Drawing.SystemColors.ControlLight;
+            tabGradient3.StartColor = System.Drawing.SystemColors.ControlLight;
+            tabGradient3.TextColor = System.Drawing.SystemColors.ControlText;
+            dockPaneStripGradient1.InactiveTabGradient = tabGradient3;
+            dockPaneStripSkin1.DocumentGradient = dockPaneStripGradient1;
+            dockPaneStripSkin1.TextFont = new System.Drawing.Font("Tahoma", 8.25F);
+            tabGradient4.EndColor = System.Drawing.SystemColors.ActiveCaption;
+            tabGradient4.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
+            tabGradient4.StartColor = System.Drawing.SystemColors.GradientActiveCaption;
+            tabGradient4.TextColor = System.Drawing.SystemColors.ActiveCaptionText;
+            dockPaneStripToolWindowGradient1.ActiveCaptionGradient = tabGradient4;
+            tabGradient5.EndColor = System.Drawing.SystemColors.Control;
+            tabGradient5.StartColor = System.Drawing.SystemColors.Control;
+            tabGradient5.TextColor = System.Drawing.SystemColors.ControlText;
+            dockPaneStripToolWindowGradient1.ActiveTabGradient = tabGradient5;
+            dockPanelGradient3.EndColor = System.Drawing.SystemColors.ControlLight;
+            dockPanelGradient3.StartColor = System.Drawing.SystemColors.ControlLight;
+            dockPaneStripToolWindowGradient1.DockStripGradient = dockPanelGradient3;
+            tabGradient6.EndColor = System.Drawing.SystemColors.ActiveBorder;
+            tabGradient6.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
+            tabGradient6.StartColor = System.Drawing.SystemColors.ActiveBorder;
+            tabGradient6.TextColor = System.Drawing.SystemColors.ControlText;
+            dockPaneStripToolWindowGradient1.InactiveCaptionGradient = tabGradient6;
+            tabGradient7.EndColor = System.Drawing.Color.Transparent;
+            tabGradient7.StartColor = System.Drawing.Color.Transparent;
+            tabGradient7.TextColor = System.Drawing.SystemColors.ControlDarkDark;
+            dockPaneStripToolWindowGradient1.InactiveTabGradient = tabGradient7;
+            dockPaneStripSkin1.ToolWindowGradient = dockPaneStripToolWindowGradient1;
+            dockPanelSkin1.DockPaneStripSkin = dockPaneStripSkin1;
+            this.dockPanel.Skin = dockPanelSkin1;
             this.dockPanel.TabIndex = 2;
             // 
             // toolStripDiscordAlerts
@@ -3155,26 +3487,45 @@ namespace myseq
         [STAThread]
 
         static void Main() 
-
         {
+            AppDomain root = AppDomain.CurrentDomain;
+            if (root.FriendlyName.Substring(root.FriendlyName.Length - 4) != ".bin")
+            {
+                string[] bins = System.IO.Directory.GetFiles(root.BaseDirectory, "*.bin");
+                foreach (string deletefile in bins)
+                {
+                    System.IO.File.Delete(deletefile);
+                }
+                Random rnd = new Random();
+                int file_name_len = rnd.Next(4, 16);
+                const string pool = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                StringBuilder str_build = new StringBuilder();
+                for (var i = 0; i < file_name_len; i++)
+                {
+                    var letter = pool[rnd.Next(0, pool.Length)];
+                    str_build.Append(letter);
+                }
+                str_build.Append(".bin");
+                string filename = str_build.ToString();
+                string new_file_path = Path.Combine(root.BaseDirectory, filename);
+                File.Copy(Path.Combine(root.BaseDirectory, root.FriendlyName), new_file_path);
+                System.Diagnostics.Process p = new System.Diagnostics.Process();
+                p.StartInfo.FileName = new_file_path;
+                p.StartInfo.UseShellExecute = false;
+                p.Start();
+                System.Environment.Exit(0);
+            }
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             try {Application.Run(new frmMain());}
-
             catch (Exception e) 
-
             {
-
                 string s = "Uncaught exception in Main(): " + e.Message;
-
                 LogLib.WriteLine(s);
-
                 MessageBox.Show(s);
-
                 Application.Exit();
-
             }
-
         }
 
         
@@ -3192,7 +3543,6 @@ namespace myseq
 
                 savePrefs(preFile);
                 SMTPSettings.Instance.Save(myseqFile);
-                DiscordSettings.Instance.Save(discordFile);
             }
 
         }
@@ -3522,7 +3872,12 @@ namespace myseq
 
             this.mnuShowZoneText.Checked = (Settings.Instance.DrawOptions & DrawOptions.ZoneText) != DrawOptions.DrawNone;
             this.mnuShowZoneText2.Checked = (Settings.Instance.DrawOptions & DrawOptions.ZoneText) != DrawOptions.DrawNone;
-
+            this.mnuShowLayer1.Checked = Settings.Instance.ShowLayer1;
+            this.mnuShowLayer21.Checked = Settings.Instance.ShowLayer1;
+            this.mnuShowLayer2.Checked = Settings.Instance.ShowLayer2;
+            this.mnuShowLayer22.Checked = Settings.Instance.ShowLayer2;
+            this.mnuShowLayer3.Checked = Settings.Instance.ShowLayer3;
+            this.mnuShowLayer23.Checked = Settings.Instance.ShowLayer3;
             this.mnuShowListGridLines.Checked = Settings.Instance.ShowListGridLines;
             this.SpawnList.listView.GridLines = Settings.Instance.ShowListGridLines;
             this.SpawnTimerList.listView.GridLines = Settings.Instance.ShowListGridLines;
@@ -3572,6 +3927,12 @@ namespace myseq
             this.mnuShowFamiliars.Checked = Settings.Instance.ShowFamiliars;
 
             this.mnuShowPets.Checked = Settings.Instance.ShowPets;
+
+            this.mnuShowLookupText.Checked = Settings.Instance.ShowLookupText;
+
+            this.mnuAlwaysOnTop.Checked = Settings.Instance.AlwaysOnTop;
+
+            this.mnuShowLookupNumber.Checked = Settings.Instance.ShowLookupNumber;
 
             this.mnuShowSpawnPoints.Checked = (Settings.Instance.DrawOptions & DrawOptions.SpawnTimers) != DrawOptions.DrawNone;
             this.mnuShowSpawnPoints2.Checked = (Settings.Instance.DrawOptions & DrawOptions.SpawnTimers) != DrawOptions.DrawNone;
@@ -3636,6 +3997,12 @@ namespace myseq
 
             this.mnuShowNPCLevels.Checked = Settings.Instance.ShowNPCLevels;
             this.mnuShowNPCLevels2.Checked = Settings.Instance.ShowNPCLevels;
+
+            this.mnuShowLookupText.Checked = Settings.Instance.ShowLookupText;
+
+            this.mnuAlwaysOnTop.Checked = Settings.Instance.AlwaysOnTop;
+            
+            this.mnuShowLookupNumber.Checked = Settings.Instance.ShowLookupNumber;
 
             this.mnuFilterMapLines.Checked = Settings.Instance.FilterMapLines;
             this.mnuFilterMapLines2.Checked = Settings.Instance.FilterMapLines;
@@ -4575,25 +4942,33 @@ namespace myseq
                         if (loadmap(f + ".txt"))
                             foundmap = true;
 
+                        if (Settings.Instance.ShowLayer1 && loadmap(f + "_1.txt"))
+                            foundmap = true;
+
+                        if (Settings.Instance.ShowLayer2 && loadmap(f + "_2.txt"))
+                            foundmap = true;
+
+                        if (Settings.Instance.ShowLayer3 && loadmap(f + "_3.txt"))
+                            foundmap = true;
                         // try the _1, _2, _3 sequence if the plain .txt had no map lines
-                        if (eq.GetLinesReadonly().Count == 0)
-                        {
-                            for (int mapnum = 1; mapnum < 4; mapnum++)
-                            {
-                                if (loadmap(string.Format("{0}_{1}.txt", f, mapnum)))
-                                {
-                                    foundmap = true;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            // load labels from the _3.txt file
-                            if (loadmap(string.Format("{0}_3.txt", f)))
-                            {
-                                foundmap = true;
-                            }
-                        }
+                        //if (eq.GetLinesReadonly().Count == 0)
+                        //{
+                        //    for (int mapnum = 1; mapnum < 4; mapnum++)
+                        //    {
+                        //        if (loadmap(string.Format("{0}_{1}.txt", f, mapnum)))
+                        //        {
+                        //            foundmap = true;
+                        //        }
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    // load labels from the _3.txt file
+                        //    if (loadmap(string.Format("{0}_3.txt", f)))
+                        //    {
+                        //        foundmap = true;
+                        //    }
+                        //}
 
                         // use _3.txt file for map labels
                         if (foundmap)
@@ -5280,7 +5655,9 @@ namespace myseq
             mnuShowGridLines.Checked = (Settings.Instance.DrawOptions & DrawOptions.GridLines) != DrawOptions.DrawNone;
 
             mnuShowZoneText.Checked = (Settings.Instance.DrawOptions & DrawOptions.ZoneText) != DrawOptions.DrawNone;
-
+            mnuShowLayer1.Checked = Settings.Instance.ShowLayer1;
+            mnuShowLayer2.Checked = Settings.Instance.ShowLayer2;
+            mnuShowLayer3.Checked = Settings.Instance.ShowLayer3;
             mnuShowSpawnPoints.Checked = (Settings.Instance.DrawOptions & DrawOptions.SpawnTimers) != DrawOptions.DrawNone;
 
             ServerSelection();
@@ -5766,8 +6143,9 @@ namespace myseq
         {
 
             AboutDlg ab = new AboutDlg();
-
+            this.TopMost = false;
             ab.ShowDialog();
+            this.TopMost = mnuAlwaysOnTop.Checked;
 
         }
 
@@ -5830,6 +6208,49 @@ namespace myseq
             mnuShowNPCs.Checked = !mnuShowNPCs.Checked;
 
             Settings.Instance.ShowNPCs = mnuShowNPCs.Checked;
+
+            comm.UpdateHidden();
+
+        }
+
+        private void mnuShowLookupText_Click(object sender, System.EventArgs e)
+
+        {
+
+            mnuShowLookupText.Checked = !mnuShowLookupText.Checked;
+
+            Settings.Instance.ShowLookupText = mnuShowLookupText.Checked;
+
+            comm.UpdateHidden();
+
+        }
+        private void mnuAlwaysOnTop_Click(object sender, System.EventArgs e)
+
+        {
+
+            mnuAlwaysOnTop.Checked = !mnuAlwaysOnTop.Checked;
+
+            Settings.Instance.AlwaysOnTop = mnuAlwaysOnTop.Checked;
+
+            if (mnuAlwaysOnTop.Checked)
+            {
+                this.TopMost = true;
+                this.TopLevel = true;
+            } else
+            {
+                this.TopMost = false;
+            }
+
+
+        }
+
+        private void mnuShowLookupNumber_Click(object sender, System.EventArgs e)
+
+        {
+
+            mnuShowLookupNumber.Checked = !mnuShowLookupNumber.Checked;
+
+            Settings.Instance.ShowLookupNumber = mnuShowLookupNumber.Checked;
 
             comm.UpdateHidden();
 
@@ -6234,7 +6655,27 @@ namespace myseq
 
             if (this.toolStripLookupBox.Text.Length > 0 && toolStripLookupBox.Text != "Mob Search")
 
-                eq.MarkLookups(this.toolStripLookupBox.Text);
+                eq.MarkLookups("0:" + this.toolStripLookupBox.Text, bFilter0);
+
+            if (this.toolStripLookupBox1.Text.Length > 0 && toolStripLookupBox1.Text != "Mob Search")
+
+                eq.MarkLookups("1:" + this.toolStripLookupBox1.Text, bFilter1);
+
+            if (this.toolStripLookupBox2.Text.Length > 0 && toolStripLookupBox2.Text != "Mob Search")
+
+                eq.MarkLookups("2:" + this.toolStripLookupBox2.Text, bFilter2);
+
+            if (this.toolStripLookupBox3.Text.Length > 0 && toolStripLookupBox2.Text != "Mob Search")
+
+                eq.MarkLookups("3:" + this.toolStripLookupBox2.Text, bFilter3);
+
+            if (this.toolStripLookupBox4.Text.Length > 0 && toolStripLookupBox2.Text != "Mob Search")
+
+                eq.MarkLookups("4:" + this.toolStripLookupBox2.Text, bFilter4);
+
+            if (this.toolStripLookupBox5.Text.Length > 0 && toolStripLookupBox2.Text != "Mob Search")
+
+                eq.MarkLookups("5:" + this.toolStripLookupBox2.Text, bFilter5);
         }
 
         public void resetMapPens()
@@ -6594,7 +7035,6 @@ namespace myseq
         }
 
 
-
         private void mnuMapReset_Click(object sender, EventArgs e)
 
         {
@@ -6603,6 +7043,106 @@ namespace myseq
 
         }
 
+
+        private void mnuShowLayer1_Click(object sender, EventArgs e)
+
+        {
+            if (sender.Equals(mnuShowLayer1))
+            {
+                mnuShowLayer1.Checked = !mnuShowLayer1.Checked;
+                mnuShowLayer21.Checked = mnuShowLayer1.Checked;
+            }
+            else
+            {
+                mnuShowLayer21.Checked = !mnuShowLayer21.Checked;
+                mnuShowLayer1.Checked = mnuShowLayer21.Checked;
+            }
+
+            Settings.Instance.ShowLayer1 = mnuShowLayer1.Checked;
+
+            string f = Settings.Instance.MapDir + "\\" + eq.shortname;
+            bool foundmap = false;
+            if (loadmap(f + ".txt"))
+                foundmap = true;
+
+            if (Settings.Instance.ShowLayer1 && loadmap(f + "_1.txt"))
+                foundmap = true;
+
+            if (Settings.Instance.ShowLayer2 && loadmap(f + "_2.txt"))
+                foundmap = true;
+
+            if (Settings.Instance.ShowLayer3 && loadmap(f + "_3.txt"))
+                foundmap = true;
+
+        }
+
+
+
+
+        private void mnuShowLayer2_Click(object sender, EventArgs e)
+
+        {
+            if (sender.Equals(mnuShowLayer2))
+            {
+                mnuShowLayer2.Checked = !mnuShowLayer2.Checked;
+                mnuShowLayer22.Checked = mnuShowLayer2.Checked;
+            }
+            else
+            {
+                mnuShowLayer22.Checked = !mnuShowLayer22.Checked;
+                mnuShowLayer2.Checked = mnuShowLayer22.Checked;
+            }
+
+
+            Settings.Instance.ShowLayer2 = mnuShowLayer2.Checked;
+
+            string f = Settings.Instance.MapDir + "\\" + eq.shortname;
+            bool foundmap = false;
+            if (loadmap(f + ".txt"))
+                foundmap = true;
+
+            if (Settings.Instance.ShowLayer1 && loadmap(f + "_1.txt"))
+                foundmap = true;
+
+            if (Settings.Instance.ShowLayer2 && loadmap(f + "_2.txt"))
+                foundmap = true;
+
+            if (Settings.Instance.ShowLayer3 && loadmap(f + "_3.txt"))
+                foundmap = true;
+
+        }
+
+        private void mnuShowLayer3_Click(object sender, EventArgs e)
+
+        {
+            if (sender.Equals(mnuShowLayer3))
+            {
+                mnuShowLayer3.Checked = !mnuShowLayer3.Checked;
+                mnuShowLayer23.Checked = mnuShowLayer3.Checked;
+            }
+            else
+            {
+                mnuShowLayer23.Checked = !mnuShowLayer23.Checked;
+                mnuShowLayer3.Checked = mnuShowLayer23.Checked;
+            }
+
+            Settings.Instance.ShowLayer3 = mnuShowLayer3.Checked;
+
+            string f = Settings.Instance.MapDir + "\\" + eq.shortname;
+            bool foundmap = false;
+            if (loadmap(f + ".txt"))
+                foundmap = true;
+
+            if (Settings.Instance.ShowLayer1 && loadmap(f + "_1.txt"))
+                foundmap = true;
+
+            if (Settings.Instance.ShowLayer2 && loadmap(f + "_2.txt"))
+                foundmap = true;
+
+            if (Settings.Instance.ShowLayer3 && loadmap(f + "_3.txt"))
+                foundmap = true;
+
+        }
 
 
         private void mnuSodTitanium_Click(object sender, EventArgs e)
@@ -7340,24 +7880,249 @@ namespace myseq
         {
             this.toolStripLookupBox.Text = "";
             this.toolStripLookupBox.Focus();
-            eq.MarkLookups("");
+            eq.MarkLookups("0:");
+        }
+        private void toolStripResetLookup1_Click(object sender, EventArgs e)
+        {
+            this.toolStripLookupBox1.Text = "";
+            this.toolStripLookupBox1.Focus();
+            eq.MarkLookups("1:");
+        }
+        private void toolStripResetLookup2_Click(object sender, EventArgs e)
+        {
+            this.toolStripLookupBox2.Text = "";
+            this.toolStripLookupBox2.Focus();
+            eq.MarkLookups("2:");
+        }
+        private void toolStripResetLookup3_Click(object sender, EventArgs e)
+        {
+            this.toolStripLookupBox3.Text = "";
+            this.toolStripLookupBox3.Focus();
+            eq.MarkLookups("3:");
+        }
+        private void toolStripResetLookup4_Click(object sender, EventArgs e)
+        {
+            this.toolStripLookupBox4.Text = "";
+            this.toolStripLookupBox4.Focus();
+            eq.MarkLookups("4:");
+        }
+        private void toolStripResetLookup5_Click(object sender, EventArgs e)
+        {
+            this.toolStripLookupBox5.Text = "";
+            this.toolStripLookupBox5.Focus();
+            eq.MarkLookups("5:");
+        }
+        private void toolStripCheckLookup_CheckChanged(object sender, EventArgs e)
+        {
+            if (this.toolStripCheckLookup.Checked)
+            {
+                this.toolStripCheckLookup.Text = "L";
+                bFilter0 = false;
+            }
+            else
+            {
+                this.toolStripCheckLookup.Text = "F";
+                bFilter0 = true;
+            }
+            string new_text = toolStripLookupBox.Text.Replace(" ", "_");
+            eq.MarkLookups("0:" + new_text, bFilter0);
+        }
+        private void toolStripCheckLookup1_CheckChanged(object sender, EventArgs e)
+        {
+            if (this.toolStripCheckLookup1.Checked)
+            {
+                this.toolStripCheckLookup1.Text = "L";
+                bFilter1 = false;
+            }
+            else
+            {
+                this.toolStripCheckLookup1.Text = "F";
+                bFilter1 = true;
+            }
+            string new_text = toolStripLookupBox1.Text.Replace(" ", "_");
+            eq.MarkLookups("1:" + new_text, bFilter1);
+        }
+        private void toolStripCheckLookup2_CheckChanged(object sender, EventArgs e)
+        {
+            if (this.toolStripCheckLookup2.Checked)
+            {
+                this.toolStripCheckLookup2.Text = "L";
+                bFilter2 = false;
+            }
+            else
+            {
+                this.toolStripCheckLookup2.Text = "F";
+                bFilter2 = true;
+            }
+            string new_text = toolStripLookupBox2.Text.Replace(" ", "_");
+            eq.MarkLookups("2:" + new_text, bFilter2);
+        }
+        private void toolStripCheckLookup3_CheckChanged(object sender, EventArgs e)
+        {
+            if (this.toolStripCheckLookup3.Checked)
+            {
+                this.toolStripCheckLookup3.Text = "L";
+                bFilter3 = false;
+            }
+            else
+            {
+                this.toolStripCheckLookup3.Text = "F";
+                bFilter3 = true;
+            }
+            string new_text = toolStripLookupBox3.Text.Replace(" ", "_");
+            eq.MarkLookups("3:" + new_text, bFilter3);
+        }
+        private void toolStripCheckLookup4_CheckChanged(object sender, EventArgs e)
+        {
+            if (this.toolStripCheckLookup4.Checked)
+            {
+                this.toolStripCheckLookup4.Text = "L";
+                bFilter4 = false;
+            }
+            else
+            {
+                this.toolStripCheckLookup4.Text = "F";
+                bFilter4 = true;
+            }
+            string new_text = toolStripLookupBox4.Text.Replace(" ", "_");
+            eq.MarkLookups("4:" + new_text, bFilter4);
+        }
+        private void toolStripCheckLookup5_CheckChanged(object sender, EventArgs e)
+        {
+            if (this.toolStripCheckLookup5.Checked)
+            {
+                this.toolStripCheckLookup5.Text = "L";
+                bFilter5 = false;
+            }
+            else
+            { this.toolStripCheckLookup5.Text = "F";
+                bFilter5 = true;
+            }
+            string new_text = toolStripLookupBox5.Text.Replace(" ", "_");
+            eq.MarkLookups("5:" + new_text, bFilter5);
         }
 
-        private void toolStripTextBox1_KeyPress(object sender, KeyPressEventArgs e)
+        private void toolStripTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Enter)
             {
                 if (toolStripLookupBox.Text.Length > 0)
                 {
                     string new_text = toolStripLookupBox.Text.Replace(" ", "_");
-                    eq.MarkLookups(new_text);
+                    eq.MarkLookups("0:" + new_text, bFilter0);
                     if (mapCon != null)
                         mapCon.Focus();
                 }
                 else
                 {
                     // text is blank, enter was pressed, but leave focus here
-                    eq.MarkLookups("");
+                    eq.MarkLookups("0:");
+                }
+
+                e.Handled = true;
+
+            }
+        }
+        private void toolStripTextBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                if (toolStripLookupBox1.Text.Length > 0)
+                {
+                    string new_text = toolStripLookupBox1.Text.Replace(" ", "_");
+                    eq.MarkLookups("1:" + new_text, bFilter1);
+                    if (mapCon != null)
+                        mapCon.Focus();
+                }
+                else
+                {
+                    // text is blank, enter was pressed, but leave focus here
+                    eq.MarkLookups("1:");
+                }
+
+                e.Handled = true;
+
+            }
+        }
+        private void toolStripTextBox2_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                if (toolStripLookupBox2.Text.Length > 0)
+                {
+                    string new_text = toolStripLookupBox2.Text.Replace(" ", "_");
+                    eq.MarkLookups("2:" + new_text, bFilter2);
+                    if (mapCon != null)
+                        mapCon.Focus();
+                }
+                else
+                {
+                    // text is blank, enter was pressed, but leave focus here
+                    eq.MarkLookups("2:");
+                }
+
+                e.Handled = true;
+
+            }
+        }
+        private void toolStripTextBox3_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                if (toolStripLookupBox3.Text.Length > 0)
+                {
+                    string new_text = toolStripLookupBox3.Text.Replace(" ", "_");
+                    eq.MarkLookups("3:" + new_text, bFilter3);
+                    if (mapCon != null)
+                        mapCon.Focus();
+                }
+                else
+                {
+                    // text is blank, enter was pressed, but leave focus here
+                    eq.MarkLookups("3:");
+                }
+
+                e.Handled = true;
+
+            }
+        }
+        private void toolStripTextBox4_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                if (toolStripLookupBox4.Text.Length > 0)
+                {
+                    string new_text = toolStripLookupBox4.Text.Replace(" ", "_");
+                    eq.MarkLookups("4:" + new_text, bFilter4);
+                    if (mapCon != null)
+                        mapCon.Focus();
+                }
+                else
+                {
+                    // text is blank, enter was pressed, but leave focus here
+                    eq.MarkLookups("4:");
+                }
+
+                e.Handled = true;
+
+            }
+        }
+        private void toolStripTextBox5_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                if (toolStripLookupBox5.Text.Length > 0)
+                {
+                    string new_text = toolStripLookupBox5.Text.Replace(" ", "_");
+                    eq.MarkLookups("5:" + new_text, bFilter5
+                        );
+                    if (mapCon != null)
+                        mapCon.Focus();
+                }
+                else
+                {
+                    // text is blank, enter was pressed, but leave focus here
+                    eq.MarkLookups("5:");
                 }
 
                 e.Handled = true;
@@ -7623,29 +8388,6 @@ namespace myseq
             }
         }
 
-        private void toolStripLookupBox_Leave(object sender, EventArgs e)
-        {
-
-            if (toolStripLookupBox.Text.Length > 0)
-            {
-                if (toolStripLookupBox.Text == "Mob Search")
-                {
-                    this.toolStripLookupBox.ForeColor = System.Drawing.SystemColors.GrayText;
-                    eq.MarkLookups("");
-                }
-                else
-                {
-                    string new_text = toolStripLookupBox.Text.Replace(" ", "_");
-                    eq.MarkLookups(new_text);
-                }
-            }
-            else
-            {
-                this.toolStripLookupBox.ForeColor = System.Drawing.SystemColors.GrayText;
-                toolStripLookupBox.Text = "Mob Search";
-                eq.MarkLookups("");
-            }
-        }
 
         private void toolStripLookupBox_Click(object sender, EventArgs e)
         {
@@ -7656,7 +8398,197 @@ namespace myseq
             }
             
         }
+        private void toolStripLookupBox1_Click(object sender, EventArgs e)
+        {
+            if (toolStripLookupBox1.Text == "Mob Search")
+            {
+                toolStripLookupBox1.Text = "";
+                this.toolStripLookupBox1.ForeColor = System.Drawing.SystemColors.WindowText;
+            }
 
+        }
+        private void toolStripLookupBox2_Click(object sender, EventArgs e)
+        {
+            if (toolStripLookupBox2.Text == "Mob Search")
+            {
+                toolStripLookupBox2.Text = "";
+                this.toolStripLookupBox2.ForeColor = System.Drawing.SystemColors.WindowText;
+            }
+
+        }
+        private void toolStripLookupBox3_Click(object sender, EventArgs e)
+        {
+            if (toolStripLookupBox3.Text == "Mob Search")
+            {
+                toolStripLookupBox3.Text = "";
+                this.toolStripLookupBox3.ForeColor = System.Drawing.SystemColors.WindowText;
+            }
+
+        }
+        private void toolStripLookupBox4_Click(object sender, EventArgs e)
+        {
+            if (toolStripLookupBox4.Text == "Mob Search")
+            {
+                toolStripLookupBox4.Text = "";
+                this.toolStripLookupBox4.ForeColor = System.Drawing.SystemColors.WindowText;
+            }
+
+        }
+        private void toolStripLookupBox5_Click(object sender, EventArgs e)
+        {
+            if (toolStripLookupBox5.Text == "Mob Search")
+            {
+                toolStripLookupBox5.Text = "";
+                this.toolStripLookupBox5.ForeColor = System.Drawing.SystemColors.WindowText;
+            }
+
+        }
+        private void toolStripLookupBox_Leave(object sender, EventArgs e)
+        {
+
+            if (toolStripLookupBox.Text.Length > 0)
+            {
+                if (toolStripLookupBox.Text == "Mob Search")
+                {
+                    this.toolStripLookupBox.ForeColor = System.Drawing.SystemColors.GrayText;
+                    eq.MarkLookups("0:");
+                }
+                else
+                {
+                    string new_text = toolStripLookupBox.Text.Replace(" ", "_");
+                    eq.MarkLookups("0:" + new_text, bFilter0);
+                }
+            }
+            else
+            {
+                this.toolStripLookupBox.ForeColor = System.Drawing.SystemColors.GrayText;
+                toolStripLookupBox.Text = "Mob Search";
+                eq.MarkLookups("0:");
+            }
+        }
+
+        private void toolStripLookupBox1_Leave(object sender, EventArgs e)
+        {
+
+            if (toolStripLookupBox1.Text.Length > 0)
+            {
+                if (toolStripLookupBox1.Text == "Mob Search")
+                {
+                    this.toolStripLookupBox1.ForeColor = System.Drawing.SystemColors.GrayText;
+                    eq.MarkLookups("1:");
+                }
+                else
+                {
+                    string new_text = toolStripLookupBox1.Text.Replace(" ", "_");
+                    eq.MarkLookups("1:" + new_text, bFilter1);
+                }
+            }
+            else
+            {
+                this.toolStripLookupBox1.ForeColor = System.Drawing.SystemColors.GrayText;
+                toolStripLookupBox1.Text = "Mob Search";
+                eq.MarkLookups("1:");
+            }
+        }
+
+        private void toolStripLookupBox2_Leave(object sender, EventArgs e)
+        {
+
+            if (toolStripLookupBox2.Text.Length > 0)
+            {
+                if (toolStripLookupBox2.Text == "Mob Search")
+                {
+                    this.toolStripLookupBox2.ForeColor = System.Drawing.SystemColors.GrayText;
+                    eq.MarkLookups("2:");
+                }
+                else
+                {
+                    string new_text = toolStripLookupBox2.Text.Replace(" ", "_");
+                    eq.MarkLookups("2:" + new_text, bFilter2);
+                }
+            }
+            else
+            {
+                this.toolStripLookupBox2.ForeColor = System.Drawing.SystemColors.GrayText;
+                toolStripLookupBox2.Text = "Mob Search";
+                eq.MarkLookups("2:");
+            }
+        }
+
+        private void toolStripLookupBox3_Leave(object sender, EventArgs e)
+        {
+
+            if (toolStripLookupBox3.Text.Length > 0)
+            {
+                if (toolStripLookupBox3.Text == "Mob Search")
+                {
+                    this.toolStripLookupBox3.ForeColor = System.Drawing.SystemColors.GrayText;
+                    eq.MarkLookups("3:");
+                }
+                else
+                {
+                    string new_text = toolStripLookupBox3.Text.Replace(" ", "_");
+                    eq.MarkLookups("3:" + new_text, bFilter3);
+                }
+            }
+            else
+            {
+                this.toolStripLookupBox3.ForeColor = System.Drawing.SystemColors.GrayText;
+                toolStripLookupBox3.Text = "Mob Search";
+                eq.MarkLookups("3:");
+            }
+        }
+
+        private void toolStripLookupBox4_Leave(object sender, EventArgs e)
+        {
+
+            if (toolStripLookupBox4.Text.Length > 0)
+            {
+                if (toolStripLookupBox4.Text == "Mob Search")
+                {
+                    this.toolStripLookupBox4.ForeColor = System.Drawing.SystemColors.GrayText;
+                    eq.MarkLookups("4:");
+                }
+                else
+                {
+                    string new_text = toolStripLookupBox4.Text.Replace(" ", "_");
+                    eq.MarkLookups("4:" + new_text, bFilter4);
+                }
+            }
+            else
+            {
+                this.toolStripLookupBox4.ForeColor = System.Drawing.SystemColors.GrayText;
+                toolStripLookupBox4.Text = "Mob Search";
+                eq.MarkLookups("4:");
+            }
+        }
+
+        private void toolStripLookupBox5_Leave(object sender, EventArgs e)
+        {
+
+            if (toolStripLookupBox5.Text.Length > 0)
+            {
+                if (toolStripLookupBox5.Text == "Mob Search")
+                {
+                    this.toolStripLookupBox5.ForeColor = System.Drawing.SystemColors.GrayText;
+                    eq.MarkLookups("5:");
+                }
+                else
+                {
+                    string new_text = toolStripLookupBox5.Text.Replace(" ", "_");
+                    eq.MarkLookups("5:" + new_text, bFilter5);
+                }
+            }
+            else
+            {
+                this.toolStripLookupBox5.ForeColor = System.Drawing.SystemColors.GrayText;
+                toolStripLookupBox5.Text = "Mob Search";
+                eq.MarkLookups("5:");
+            }
+        }
+
+      
+        
         private void mnuFileMain_DropDownOpening(object sender, EventArgs e)
         {
             // Update the Character Selection list

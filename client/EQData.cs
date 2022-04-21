@@ -36,18 +36,15 @@ using Discord;
 
 using Discord.Webhook;
 
-using NodaTime;
-
 
 using Color = System.Drawing.Color;
-
-
 
 using Structures;
 
 
 
-namespace myseq {
+namespace myseq
+{
 
 
 
@@ -209,6 +206,20 @@ namespace myseq {
 
 
         private static string sndFile;
+        private string search0 = "";
+        private string search1 = "";
+        private string search2 = "";
+        private string search3 = "";
+        private string search4 = "";
+        private string search5 = "";
+        private bool filter0 = false;
+        private bool filter1 = false;
+        private bool filter2 = false;
+        private bool filter3 = false;
+        private bool filter4 = false;
+        private bool filter5 = false;
+        private bool levelCheck = false;
+        private int searchLevel = 0;
 
 
 
@@ -242,7 +253,7 @@ namespace myseq {
         {
 
             playAlerts = true;
-           
+
         }
 
         public void DisablePlayAlerts()
@@ -253,21 +264,205 @@ namespace myseq {
         }
 
 
-        public void MarkLookups(string name)
+        public void MarkLookups(string name, bool filterMob = false)
         {
-            string new_name = name.Replace(" ", "_");
-            Regex regEx = new Regex(".*" + name + ".*", RegexOptions.IgnoreCase);
+            if (name.Length > 2 && name.Substring(2) == "Mob_Search") { name = name.Substring(0, 2); }
+            if (name.Substring(0, 2) == "0:")
+            {
+                if (name.Length > 2)
+                {
+                    search0 = name.Substring(2);
+                    filter0 = filterMob;
+                }
+                else
+                { search0 = ""; }
+            }
+            if (name.Substring(0, 2) == "1:")
+            {
+                if (name.Length > 2)
+                {
+                    search1 = name.Substring(2);
+                    filter1 = filterMob;
+                }
+                else
+                { search1 = ""; }
+            }
+            if (name.Substring(0, 2) == "2:")
+            {
+                if (name.Length > 2)
+                {
+                    search2 = name.Substring(2);
+                    filter2 = filterMob;
+                }
+                else
+                { search2 = ""; }
+            }
+            if (name.Substring(0, 2) == "3:")
+            {
+                if (name.Length > 2)
+                {
+                    search3 = name.Substring(2);
+                    filter3 = filterMob;
+                }
+                else
+                { search3 = ""; }
+            }
+            if (name.Substring(0, 2) == "4:")
+            {
+                if (name.Length > 2)
+                {
+                    search4 = name.Substring(2);
+                    filter4 = filterMob;
+                }
+                else
+                { search4 = ""; }
+            }
+            if (name.Substring(0, 2) == "5:")
+            {
+                if (name.Length > 2)
+                {
+                    search5 = name.Substring(2);
+                    filter5 = filterMob;
+                }
+                else
+                { search5 = ""; }
+            }
 
             foreach (Structures.SPAWNINFO sp in mobs.Values)
             {
+                sp.isLookup = false;
+                sp.lookupNumber = "";
+                if (search0.Length > 0)
+                {
+                    levelCheck = false;
+                    if (search0.Length > 2 && search0.Substring(0,2).ToUpper() == "L:")
+                    {
+                        int.TryParse(search0.Substring(2), out searchLevel);
+                        if (searchLevel != 0 && (sp.Level == searchLevel))
+                            {
+                            levelCheck = true;
+                        }
+                        
+                    }
+                    Regex regEx0 = new Regex(".*" + search0 + ".*", RegexOptions.IgnoreCase);
+                    if (levelCheck || (regEx0.Match(sp.Name).Success == true))
+                    {
+                        sp.isLookup = true;
+                        sp.lookupNumber = "1";
+                        sp.hidden = false;
+                        if (filter0) { sp.hidden = true; }
+                    }
+                }
+                if (search1.Length > 0)
+                {
+                    levelCheck = false;
+                    if (search1.Length > 2 && search1.Substring(0, 2).ToUpper() == "L:")
+                    {
+                        int.TryParse(search1.Substring(2), out searchLevel);
+                        if (searchLevel != 0 && (sp.Level == searchLevel))
+                        {
+                            levelCheck = true;
+                        }
 
-                if (name.Length > 0) { sp.isLookup = regEx.Match(sp.Name).Success; }
+                    }
+                    Regex regEx1 = new Regex(".*" + search1 + ".*", RegexOptions.IgnoreCase);
+                    if (levelCheck || (regEx1.Match(sp.Name).Success == true))
+                    {
+                        sp.isLookup = true;
+                        sp.lookupNumber = "2";
+                        sp.hidden = false;
+                        if (filter1) { sp.hidden = true; }
+                    }
+                }
+                if (search2.Length > 0)
+                {
+                    levelCheck = false;
+                    if (search2.Length > 2 && search2.Substring(0, 2).ToUpper() == "L:")
+                    {
+                        int.TryParse(search2.Substring(2), out searchLevel);
+                        if (searchLevel != 0 && (sp.Level == searchLevel))
+                        {
+                            levelCheck = true;
+                        }
 
-                else { sp.isLookup = false; }
+                    }
+                    Regex regEx2 = new Regex(".*" + search2 + ".*", RegexOptions.IgnoreCase);
+                    if (levelCheck || (regEx2.Match(sp.Name).Success == true))
+                    {
+                        sp.isLookup = true;
+                        sp.lookupNumber = "3";
+                        sp.hidden = false;
+                        if (filter2) { sp.hidden = true; }
+                    }
+                }
+                if (search3.Length > 0)
+                {
+                    levelCheck = false;
+                    if (search3.Length > 2 && search3.Substring(0, 2).ToUpper() == "L:")
+                    {
+                        int.TryParse(search3.Substring(2), out searchLevel);
+                        if (searchLevel != 0 && (sp.Level == searchLevel))
+                        {
+                            levelCheck = true;
+                        }
 
+                    }
+                    Regex regEx3 = new Regex(".*" + search3 + ".*", RegexOptions.IgnoreCase);
+                    if (levelCheck || (regEx3.Match(sp.Name).Success == true))
+                    {
+                        sp.isLookup = true;
+                        sp.lookupNumber = "4";
+                        sp.hidden = false;
+                        if (filter3) { sp.hidden = true; }
+                    }
+                }
+                if (search4.Length > 0)
+                {
+                    levelCheck = false;
+                    if (search4.Length > 2 && search4.Substring(0, 2).ToUpper() == "L:")
+                    {
+                        int.TryParse(search4.Substring(2), out searchLevel);
+                        if (searchLevel != 0 && (sp.Level == searchLevel))
+                        {
+                            levelCheck = true;
+                        }
+
+                    }
+                    Regex regEx4 = new Regex(".*" + search4 + ".*", RegexOptions.IgnoreCase);
+                    if (levelCheck || (regEx4.Match(sp.Name).Success == true))
+                    {
+                        sp.isLookup = true;
+                        sp.lookupNumber = "5";
+                        sp.hidden = false;
+                        if (filter4) { sp.hidden = true; }
+                    }
+                }
+                if (search5.Length > 0)
+                {
+                    levelCheck = false;
+                    if (search5.Length > 2 && search5.Substring(0, 2).ToUpper() == "L:")
+                    {
+                        int.TryParse(search5.Substring(2), out searchLevel);
+                        if (searchLevel != 0 && (sp.Level == searchLevel))
+                        {
+                            levelCheck = true;
+                        }
+
+                    }
+                    Regex regEx5 = new Regex(".*" + search5 + ".*", RegexOptions.IgnoreCase);
+                    if (levelCheck || (regEx5.Match(sp.Name).Success == true))
+                    {
+                        sp.isLookup = true;
+                        sp.lookupNumber = "6";
+                        sp.hidden = false;
+                        if (filter5) { sp.hidden = true; }
+                    }
+                }
             }
 
         }
+
+
 
         public void AddMobTrailPoint(MobTrailPoint work)
         {
@@ -477,7 +672,7 @@ namespace myseq {
 
             if (sp != null)
             {
-                
+
                 if (Settings.Instance.AutoSelectSpawnList)
                 {
 
@@ -1226,7 +1421,7 @@ namespace myseq {
                                 else
 
                                     bOK = false;
-                                
+
 
 
                                 if (bOK && (tok = getnexttoken(ref line, ',')) != null)
@@ -2332,7 +2527,7 @@ namespace myseq {
 
                     if (filters.alert.Count > 0 && !alert)
 
-                        if (FindMatches(filters.alert, itemname,Settings.Instance.NoneOnAlert,
+                        if (FindMatches(filters.alert, itemname, Settings.Instance.NoneOnAlert,
 
                             Settings.Instance.TalkOnAlert, "Ground Item",
 
@@ -2487,10 +2682,14 @@ namespace myseq {
 
         public void ProcessSpawns(SPAWNINFO si, frmMain f1, ListViewPanel SpawnList, Filters filters, MapPane mapPane, RegexHelper reh, bool update_hidden)
         {
-            
+
             //LogLib.WriteLine("Entering ProcessSpawns()", LogLevel.Trace);
 
             CorpseAlerts = Settings.Instance.CorpseAlerts;
+            if (si.Name.Contains("a_tainted_egg"))
+            {
+                si.Class = 1;
+            }
 
             try
             {
@@ -2520,7 +2719,7 @@ namespace myseq {
                     // keep a reference to the listview item to speed up lookups.
 
                     ListViewItem li = mob.listitem;
-                    
+
                     // some of these should not change often, so only check every 10 times through
                     if (mob.refresh > 10)
                     {
@@ -2732,7 +2931,7 @@ namespace myseq {
 
                                     // moved the type change before this.  So now only trigger kills
                                     // for name changes of corpses.
-                                    mobsTimers.Kill(mob, filters.alert);
+                                    mobsTimers.Kill(mob);
                                 }
 
                             }
@@ -2842,7 +3041,8 @@ namespace myseq {
                         {
 
                             mob.OwnerID = si.OwnerID;
-                            if (mob.OwnerID == 0) {
+                            if (mob.OwnerID == 0)
+                            {
 
                                 li.SubItems[6].Text = "";
                                 mob.isPet = false;
@@ -2884,34 +3084,38 @@ namespace myseq {
 
                     } // end refresh > 10
 
-                    mob.refresh++;    
+                    mob.refresh++;
 
                     // Set variables we dont want to trigger list update
 
                     if ((selectedID != (int)mob.SpawnID))
                     {
-                        
-                        if (mob.X != si.X) {
+
+                        if (mob.X != si.X)
+                        {
 
                             // ensure that map is big enough to show all spawns.
 
                             if (mapPane != null && mapPane.scale.Value == 100M)
 
                                 CheckMapMinMax(si);
-                            
+
                             mob.X = si.X;
 
-                            if (mob.Y != si.Y) {
-                            
+                            if (mob.Y != si.Y)
+                            {
+
                                 mob.Y = si.Y;
                             }
-                            
-                        } else if (mob.Y != si.Y) {
-                            
+
+                        }
+                        else if (mob.Y != si.Y)
+                        {
+
                             mob.Y = si.Y;
 
                         }
-                        
+
                         // update these for all but selected mob, so they do not refresh for all mobs
 
                         mob.Z = si.Z;
@@ -2921,7 +3125,7 @@ namespace myseq {
 
                     mob.SpeedRun = si.SpeedRun;
 
-      
+
 
                     if (mob.SpeedRun != si.SpeedRun)
                     {
@@ -2985,6 +3189,7 @@ namespace myseq {
                 if (!found && si.Name.Length > 0)
                 {
 
+                    // LogLib.WriteLine(String.Format("Spawninfo Name: {0} Type: {1} Class {2} Race {3}",si.Name,si.Type,si.Class,si.Race), LogLevel.Info);
                     bool alert = false;
 
                     // ensure that map is big enough to show all spawns.
@@ -3075,11 +3280,14 @@ namespace myseq {
                                 if (mobs.ContainsKey(si.OwnerID))
                                 {
                                     owner = (SPAWNINFO)mobs[si.OwnerID];
-                                    if (owner.IsPlayer()) {
+                                    if (owner.IsPlayer())
+                                    {
                                         si.isPet = true;
                                         if (!Settings.Instance.ShowPets) si.hidden = true;
                                     }
-                                } else {
+                                }
+                                else
+                                {
                                     // we didnt find owner, so set to 0
                                     // so we can check again next update
                                     si.OwnerID = 0;
@@ -3125,7 +3333,7 @@ namespace myseq {
                                 si.hidden = false;
 
                                 si.isFamiliar = true;
-                                
+
                                 if (!Settings.Instance.ShowFamiliars) si.hidden = true;
 
                             }
@@ -3143,6 +3351,7 @@ namespace myseq {
 
                         string matchmobname;
 
+
                         if (si.isMerc)
 
                             mobname = FixMobNameToo(si.Name);
@@ -3157,6 +3366,18 @@ namespace myseq {
                             matchmobname = mobname;
 
                         string mobnameWithInfo = mobname;
+
+                        string primaryName = "";
+
+                        if (si.Primary > 0)
+
+                            primaryName = itemNumToString(si.Primary);
+
+                        string offhandName = "";
+
+                        if (si.Offhand > 0)
+
+                            offhandName = itemNumToString(si.Offhand);
 
                         string loc = String.Format("{0:f3},{1:f3},{2:f3}", si.Y, si.X, si.Z);
 
@@ -3396,15 +3617,119 @@ namespace myseq {
                                 }
                             }
 
-                            if (f1.toolStripLookupBox.Text.Length > 0 && f1.toolStripLookupBox.Text != "Mob Search")
+                            // [Primary]
+                            // Acts like a hunt mob.
+
+                            if (filters.primaryItem.Count > 0 && (!si.isCorpse || CorpseAlerts))
+
+                                if (FindMatches(filters.primaryItem, primaryName, Settings.Instance.NoneOnHunt,
+
+                                    Settings.Instance.TalkOnHunt, "Hunt Mob Primary",
+
+                                    Settings.Instance.PlayOnHunt, Settings.Instance.HuntAudioFile,
+
+                                    Settings.Instance.BeepOnHunt, MatchFullTextH))
+                                {
+
+                                    alert = true;
+
+                                    si.isHunt = true;
+
+                                    if (PrefixStars)
+
+                                        mobnameWithInfo = HuntPrefix + " " + mobnameWithInfo;
+
+                                    if (AffixStars)
+
+                                        mobnameWithInfo += " " + HuntPrefix;
+
+                                }
+
+                            // [Offhand]
+                            // Acts like a hunt mob.
+
+                            if (filters.offhandItem.Count > 0 && (!si.isCorpse || CorpseAlerts))
+
+                                if (FindMatches(filters.offhandItem, offhandName, Settings.Instance.NoneOnHunt,
+
+                                    Settings.Instance.TalkOnHunt, "Hunt Mob",
+
+                                    Settings.Instance.PlayOnHunt, Settings.Instance.HuntAudioFile,
+
+                                    Settings.Instance.BeepOnHunt, MatchFullTextH))
+                                {
+
+                                    alert = true;
+
+                                    si.isHunt = true;
+
+                                    if (PrefixStars)
+
+                                        mobnameWithInfo = HuntPrefix + " " + mobnameWithInfo;
+
+                                    if (AffixStars)
+
+                                        mobnameWithInfo += " " + HuntPrefix;
+
+                                }
+
+
+                            si.isLookup = false;
+
+                                if (f1.toolStripLookupBox.Text.Length > 0 && f1.toolStripLookupBox.Text != "Mob Search")
                             {
                                 string matchstring = f1.toolStripLookupBox.Text.ToString();
                                 Regex regEx = new Regex(".*" + matchstring + ".*", RegexOptions.IgnoreCase);
 
-                                si.isLookup = regEx.Match(matchmobname).Success;
+                                if (regEx.Match(matchmobname).Success) si.isLookup = true;
 
                             }
-                        } 
+
+                            if (f1.toolStripLookupBox1.Text.Length > 0 && f1.toolStripLookupBox1.Text != "Mob Search")
+                            {
+                                string matchstring = f1.toolStripLookupBox1.Text.ToString();
+                                Regex regEx1 = new Regex(".*" + matchstring + ".*", RegexOptions.IgnoreCase);
+
+                                if (regEx1.Match(matchmobname).Success) si.isLookup = true;
+
+                            }
+
+                            if (f1.toolStripLookupBox2.Text.Length > 0 && f1.toolStripLookupBox2.Text != "Mob Search")
+                            {
+                                string matchstring = f1.toolStripLookupBox2.Text.ToString();
+                                Regex regEx2 = new Regex(".*" + matchstring + ".*", RegexOptions.IgnoreCase);
+
+                                if (regEx2.Match(matchmobname).Success) si.isLookup = true;
+
+                            }
+
+                            if (f1.toolStripLookupBox3.Text.Length > 0 && f1.toolStripLookupBox3.Text != "Mob Search")
+                            {
+                                string matchstring = f1.toolStripLookupBox3.Text.ToString();
+                                Regex regEx3 = new Regex(".*" + matchstring + ".*", RegexOptions.IgnoreCase);
+
+                                if (regEx3.Match(matchmobname).Success) si.isLookup = true;
+
+                            }
+
+                            if (f1.toolStripLookupBox4.Text.Length > 0 && f1.toolStripLookupBox4.Text != "Mob Search")
+                            {
+                                string matchstring = f1.toolStripLookupBox.Text.ToString();
+                                Regex regEx4 = new Regex(".*" + matchstring + ".*", RegexOptions.IgnoreCase);
+
+                                if (regEx4.Match(matchmobname).Success) si.isLookup = true;
+
+                            }
+
+                            if(f1.toolStripLookupBox5.Text.Length > 0 && f1.toolStripLookupBox5.Text != "Mob Search")
+                            {
+                                string matchstring = f1.toolStripLookupBox5.Text.ToString();
+                                Regex regEx5 = new Regex(".*" + matchstring + ".*", RegexOptions.IgnoreCase);
+
+                                if (regEx5.Match(matchmobname).Success) si.isLookup = true;
+
+                            }
+                        }
 
 
                         ListViewItem item1 = new ListViewItem(mobnameWithInfo);
@@ -3528,7 +3853,7 @@ namespace myseq {
 
                         si.gone = 0;
 
-                        
+
                         si.refresh = rnd.Next(0, 10);
 
                         si.listitem = item1;
@@ -3628,8 +3953,6 @@ namespace myseq {
         {
 
             string t = mobname;
-            mobname.Replace(@"`", "");
-
 
             bool alert = false;
 
@@ -3637,7 +3960,7 @@ namespace myseq {
 
             foreach (string str in exps)
             {
-                str.Replace(@"`", "");
+
                 bool matched = false;
 
                 // if "match full text" is ON...
@@ -3696,11 +4019,8 @@ namespace myseq {
 
                             if (DiscordOnMatch)
                             {
-                                var currenttime = DateTime.UtcNow;
-                                var tz = DateTimeZoneProviders.Tzdb.GetSystemDefault();
-                                var zdt = new ZonedDateTime(Instant.FromDateTimeUtc(currenttime), tz);
-                                string timestring = zdt.ToString("hh':'mm':'ss' 'tt' 'x' 'MM'/'dd'/'yyyy", CultureInfo.InvariantCulture);
-                                messagecontent = FixMobNameToSpeak(t) + " Spawned at " + timestring;
+
+                                messagecontent = FixMobNameToSpeak(t) + " Spawned at " + DateTime.Now.ToShortTimeString() + " " + DateTime.Now.ToShortDateString();
                                 DiscordMessage D = new DiscordMessage();
                                 D.messageContent = messagecontent;
                                 ThreadStart discordDelegate = new ThreadStart(D.Discord_Message);
@@ -3751,7 +4071,7 @@ namespace myseq {
                                 else
                                 {
                                     smtpClient.UseDefaultCredentials = false;
-                                    
+
                                     if (SMTPSettings.Instance.SmtpDomain.ToString() != string.Empty)
                                         smtpClient.Credentials = new System.Net.NetworkCredential(SMTPSettings.Instance.SmtpUsername, SMTPSettings.Instance.SmtpPassword.ToString(), SMTPSettings.Instance.SmtpDomain.ToString());
                                     else
@@ -3767,7 +4087,8 @@ namespace myseq {
 
                                 object UserState = mailMessage;
                                 // Send away ....
-                                try { 
+                                try
+                                {
                                     smtpClient.SendAsync(mailMessage, UserState);
                                 }
                                 catch (Exception Ex)
@@ -3782,7 +4103,7 @@ namespace myseq {
                     }
 
                     alert = true;
-                    
+
                     break;
 
                 }
@@ -3792,7 +4113,6 @@ namespace myseq {
             return alert;
 
         }
-
 
         private void SmtpClient_OnCompleted(object sender, AsyncCompletedEventArgs e)
         {
@@ -4207,13 +4527,13 @@ namespace myseq {
                     playerinfo.Name = si.Name;
                     f1.SetCharSelection(playerinfo.Name.ToString());
                     f1.SetTitle();
-                    
+
                 }
                 else
                 {
                     // needed? doubt it...
                     playerinfo.Name = si.Name;
- 
+
                 }
 
                 playerinfo.Lastname = si.Lastname;
@@ -4227,7 +4547,7 @@ namespace myseq {
 
                     if (Settings.Instance.FollowOption == FollowOption.Player)
 
-                         f1.ReAdjust();
+                        f1.ReAdjust();
 
                 }
 
@@ -4240,14 +4560,16 @@ namespace myseq {
                 playerinfo.SpeedRun = si.SpeedRun;
 
                 if (playerinfo.Level != si.Level)
-                {     
+                {
                     if (f1.gConBaseName.Length > 0)
                     {
                         if (si.Level > playerinfo.Level)
                         {
                             int diff = si.Level - playerinfo.Level;
                             f1.gconLevel += diff;
-                        } else {
+                        }
+                        else
+                        {
                             int diff = playerinfo.Level - si.Level;
                             f1.gconLevel -= diff;
                         }
@@ -4476,7 +4798,7 @@ namespace myseq {
 
                 }
 
-                    // If using SoF Con Colors
+                // If using SoF Con Colors
 
                 else if (Settings.Instance.SoFCon)
                 {
@@ -5017,7 +5339,7 @@ namespace myseq {
             SolidBrush distinctbrush = new SolidBrush(Color.Black);
             foreach (MapText t in texts)
             {
-                
+
                 if (Settings.Instance.ForceDistinctText)
                     t.draw_color = GetDistinctColor(distinctbrush);
                 else
@@ -5266,7 +5588,7 @@ namespace myseq {
                 {
                     if (index2 > index && tex1.x == tex2.x && tex1.y == tex2.y && tex1.z == tex2.z && tex1.text != tex2.text)
                     {
-                        tex2.offset = tex1.offset + (int)(2.0f*Settings.Instance.MapLabelFontSize);
+                        tex2.offset = tex1.offset + (int)(2.0f * Settings.Instance.MapLabelFontSize);
                     }
                     index2++;
                 }
@@ -5385,6 +5707,7 @@ namespace myseq {
 
         #endregion
     }
+
 
     public class DiscordMessage
     {

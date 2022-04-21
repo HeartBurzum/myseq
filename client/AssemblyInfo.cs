@@ -16,19 +16,19 @@ using System.Runtime.InteropServices;
 
 //
 
-[assembly: AssemblyTitle("MySEQ Open Client")]
+[assembly: AssemblyTitle("")]
 
-[assembly: AssemblyDescription("MySEQ Open Client")]
+[assembly: AssemblyDescription("")]
 
-[assembly: AssemblyConfiguration("MySEQ")]
+[assembly: AssemblyConfiguration("")]
 
-[assembly: AssemblyCompany("MySEQ Project")]
+[assembly: AssemblyCompany("")]
 
-[assembly: AssemblyProduct("MySEQ Production")]
+[assembly: AssemblyProduct("")]
 
-[assembly: AssemblyCopyright("MySEQ Open (GPL)")]
+[assembly: AssemblyCopyright("")]
 
-[assembly: AssemblyTrademark("MySEQ Open")]
+[assembly: AssemblyTrademark("")]
 
 [assembly: AssemblyCulture("")]		
 
@@ -54,7 +54,7 @@ using System.Runtime.InteropServices;
 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("2.4.1.0")]
+//[assembly: AssemblyVersion("2.5.0.0")]
 
 //
 

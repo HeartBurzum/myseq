@@ -98,6 +98,7 @@ namespace Structures
 
     };
 
+
     #region DiscordSettings class
 
     [Serializable]
@@ -116,7 +117,7 @@ namespace Structures
 
         public string DiscordWebhookUrl { get { return discordWebhookUrl; } set { discordWebhookUrl = value; } }
 
-        private DiscordSettings() {}
+        private DiscordSettings() { }
 
         public static DiscordSettings Instance
         {
@@ -611,6 +612,12 @@ namespace Structures
 
         private bool showGroundItemList = true;
 
+        private bool showLayer1 = false;
+
+        private bool showLayer2 = false;
+
+        private bool showLayer3 = false;
+
 
 
         private string Title = "";
@@ -729,9 +736,16 @@ namespace Structures
 
         // new filters stuff
 
+
         private bool showPlayers = true;
 
         private bool showNPCs = true;
+
+        private bool showLookupText = false;
+
+        private bool showLookupNumber = true;
+
+        private bool alwaysOnTop = false;
 
         private bool showCorpses = true;
 
@@ -821,6 +835,13 @@ namespace Structures
 
         public bool ShowNPCs { get { return showNPCs; } set { showNPCs = value; } }
 
+        public bool ShowLookupText { get { return showLookupText; } set { showLookupText = value; } }
+
+        public bool ShowLookupNumber { get { return showLookupNumber; } set { showLookupNumber = value; } }
+
+        public bool AlwaysOnTop { get { return alwaysOnTop; } set { alwaysOnTop = value; } }
+
+
         public bool ShowCorpses { get { return showCorpses; } set { showCorpses = value; } }
 
         public bool ShowPCCorpses { get { return showPCCorpses; } set { showPCCorpses = value; } }
@@ -908,6 +929,11 @@ namespace Structures
         public bool ShowMobListTimer {get{return showMobListTimer;} set{showMobListTimer = value; } }
 
         public bool ShowGroundItemList { get { return showGroundItemList; } set { showGroundItemList = value; } }
+
+        public bool ShowLayer1 { get { return showLayer1; } set { showLayer1 = value; } }
+        public bool ShowLayer2 { get { return showLayer2; } set { showLayer2 = value; } }
+
+        public bool ShowLayer3 { get { return showLayer3; } set { showLayer3 = value; } }
 
         public bool NoneOnHunt {get{return noneOnHunt;} set{noneOnHunt = value;}}
 
@@ -1216,6 +1242,15 @@ namespace Structures
                                 case "showPlayerCorpseNames":
                                     ShowPlayerCorpseNames = reader.ReadElementContentAsBoolean();
                                     break;
+                                case "showLayer1":
+                                    ShowLayer1 = reader.ReadElementContentAsBoolean();
+                                    break;
+                                case "showLayer2":
+                                    ShowLayer2 = reader.ReadElementContentAsBoolean();
+                                    break;
+                                case "showLayer3":
+                                    ShowLayer3 = reader.ReadElementContentAsBoolean();
+                                    break;
                                 case "gridInterval":
                                     GridInterval = reader.ReadElementContentAsInt();
                                     break;
@@ -1302,6 +1337,12 @@ namespace Structures
                                     break;
                                 case "showNPCLevels":
                                     ShowNPCLevels = reader.ReadElementContentAsBoolean();
+                                    break;
+                                case "showLookupText":
+                                    ShowLookupText = reader.ReadElementContentAsBoolean();
+                                    break;
+                                case "showLookupNumber":
+                                    ShowLookupNumber = reader.ReadElementContentAsBoolean();
                                     break;
                                 case "autoSelectSpawnList":
                                     AutoSelectSpawnList = reader.ReadElementContentAsBoolean();
